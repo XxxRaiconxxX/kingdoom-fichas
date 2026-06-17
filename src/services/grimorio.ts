@@ -1,6 +1,6 @@
 // Catálogo del Grimorio: copia empaquetada (offline) + sync desde Supabase.
-import bundled from "./grimorio.json";
-import { normalizar } from "./razas";
+import bundled from "../data/grimorio.json";
+import { normalizar } from "../data/razas";
 
 export interface EstiloMagia {
   id: string;

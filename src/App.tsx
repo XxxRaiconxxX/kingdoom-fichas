@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Clipboard } from "@capacitor/clipboard";
 import { Share } from "@capacitor/share";
-import "./App.css";
+import "./styles/App.css";
 import heroImage from "./assets/hero.png";
+import { Campo } from "./components/Campo";
+import { MetricCard } from "./components/MetricCard";
+import { SectionCard } from "./components/SectionCard";
 import { CLASES_SOCIALES, exigeTitulo } from "./data/clasesSociales";
-import { sincronizarGrimorio } from "./data/grimorio";
 import { RAZAS_POR_CATEGORIA } from "./data/razas";
 import { REINOS } from "./data/reinos";
 import {
@@ -18,99 +20,26 @@ import {
   sumaEstadisticas,
   sumaNivelesPoderes,
 } from "./schema/fichaSchema";
-import {
-  analizarFichaConIA,
-  type AnalisisIA,
-} from "./utils/analizarConIA";
+import { analizarFichaConIA, type AnalisisIA } from "./services/analizarConIA";
+import { sincronizarGrimorio } from "./services/grimorio";
 import { generarFichaAleatoria } from "./utils/generarFichaAleatoria";
 import { generarTextoWhatsApp } from "./utils/generarTextoWhatsApp";
 import { validarFicha } from "./validation/validarFicha";
 
 const ICONO: Record<string, string> = {
-  ok: "✓",
+  ok: String.fromCodePoint(0x2713),
   warn: "!",
-  error: "✕",
+  error: String.fromCodePoint(0x2715),
 };
 
-type CampoProps = {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  textarea?: boolean;
-  placeholder?: string;
-};
-
-function Campo({
-  label,
-  value,
-  onChange,
-  textarea = false,
-  placeholder,
-}: CampoProps) {
-  return (
-    <label className="field">
-      <span className="field__label">{label}</span>
-      {textarea ? (
-        <textarea
-          value={value}
-          placeholder={placeholder}
-          onChange={(event) => onChange(event.target.value)}
-          rows={4}
-        />
-      ) : (
-        <input
-          value={value}
-          placeholder={placeholder}
-          onChange={(event) => onChange(event.target.value)}
-        />
-      )}
-    </label>
-  );
-}
-
-function SectionCard(props: {
-  eyebrow: string;
-  title: string;
-  description: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="section-card">
-      <div className="section-card__head">
-        <p className="eyebrow">{props.eyebrow}</p>
-        <h2>{props.title}</h2>
-        <p className="section-card__description">{props.description}</p>
-      </div>
-      {props.children}
-    </section>
-  );
-}
-
-function MetricCard(props: {
-  label: string;
-  value: string;
-  detail: string;
-  ratio?: number;
-  tone?: "neutral" | "ok" | "over";
-}) {
-  const tone = props.tone ?? "neutral";
-  const hasMeter = typeof props.ratio === "number";
-  return (
-    <div className={`metric-card metric-card--${tone}`}>
-      <span className="metric-card__label">{props.label}</span>
-      <strong className="metric-card__value">{props.value}</strong>
-      {hasMeter ? (
-        <span className="metric-card__meter" aria-hidden="true">
-          <span
-            className="metric-card__meter-fill"
-            style={{ transform: `scaleX(${Math.min(1, Math.max(0, props.ratio ?? 0))})` }}
-          />
-        </span>
-      ) : null}
-      <span className="metric-card__detail">{props.detail}</span>
-    </div>
-  );
-}
+const GLYPH_RANDOM = String.fromCodePoint(0x2684);
+const GLYPH_SYNC = String.fromCodePoint(0x27f3);
+const GLYPH_CLEAR = String.fromCodePoint(0x232b);
+const GLYPH_TOAST = String.fromCodePoint(0x2726);
+const GLYPH_EMPTY = String.fromCodePoint(0x2736);
+const GLYPH_COPY = String.fromCodePoint(0x274f);
+const GLYPH_SEND = String.fromCodePoint(0x27a4);
+const GLYPH_CHEVRON = String.fromCodePoint(0x25b8);
 
 export default function App() {
   const [ficha, setFicha] = useState<Ficha>(fichaVacia());
@@ -152,7 +81,7 @@ export default function App() {
       setFicha((anterior) => ({ ...anterior }));
     } catch {
       setAviso(
-        "No se pudo actualizar el grimorio. La app seguira usando la copia local."
+        "No se pudo actualizar el grimorio. La app seguirá usando la copia local."
       );
     } finally {
       setSincronizando(false);
@@ -203,7 +132,7 @@ export default function App() {
 
   function aleatoria() {
     setFicha(generarFichaAleatoria());
-    setAviso("Se genero una base aleatoria para que la edites a tu gusto.");
+    setAviso("Se generó una base aleatoria para que la edites a tu gusto.");
     setTimeout(() => setAviso(""), 2500);
   }
 
@@ -244,7 +173,7 @@ export default function App() {
 
         <div className="hero-card__visual">
           <img src={heroImage} alt="Heroe del reino" />
-          <div className={`hero-card__seal ${validacion.aprobada ? "is-ok" : "is-pending"}`}>
+          <div className={`hero-card__seal ${validacion.aprobada ? ICONO.ok : ICONO.error}`}>
             <span className="hero-card__seal-title">Estado del reino</span>
             <strong>{validacion.aprobada ? "Ficha apta" : "Revisión en curso"}</strong>
             <span>
@@ -258,22 +187,22 @@ export default function App() {
 
       <div className="toolbar">
         <button onClick={aleatoria}>
-          <span className="btn-glyph" aria-hidden="true">⚄</span>
+          <span className="btn-glyph" aria-hidden="true">{GLYPH_RANDOM}</span>
           Ficha aleatoria
         </button>
         <button className="button-secondary" onClick={sincronizar} disabled={sincronizando}>
-          <span className="btn-glyph" aria-hidden="true">⟳</span>
-          {sincronizando ? "Sincronizando grimorio…" : "Sincronizar grimorio"}
+          <span className="btn-glyph" aria-hidden="true">{GLYPH_SYNC}</span>
+          {sincronizando ? "Sincronizando grimorio..." : "Sincronizar grimorio"}
         </button>
         <button className="button-secondary" onClick={limpiar}>
-          <span className="btn-glyph" aria-hidden="true">⌫</span>
+          <span className="btn-glyph" aria-hidden="true">{GLYPH_CLEAR}</span>
           Limpiar tablero
         </button>
       </div>
 
       {aviso ? (
         <div className="toast" role="status">
-          <span className="toast__glyph" aria-hidden="true">✦</span>
+          <span className="toast__glyph" aria-hidden="true">{GLYPH_TOAST}</span>
           <span>{aviso}</span>
         </div>
       ) : null}
@@ -561,7 +490,7 @@ export default function App() {
               </span>
               {validacion.aprobada
                 ? "Ficha lista para el reino"
-                : `${validacion.errores} errores · ${validacion.avisos} avisos activos`}
+                : `${validacion.errores} errores ? ${validacion.avisos} avisos activos`}
             </div>
 
             <div className="sidebar-metrics">
@@ -573,7 +502,7 @@ export default function App() {
               <MetricCard
                 label="Avisos"
                 value={`${validacion.avisos}`}
-                detail="Requieren revision"
+                detail="Requieren revisión"
               />
             </div>
           </section>
@@ -607,7 +536,7 @@ export default function App() {
               onClick={analizarIA}
               disabled={analizando}
             >
-              {analizando ? "Consultando al archivista…" : "Analizar con IA"}
+              {analizando ? "Consultando al archivista..." : "Analizar con IA"}
             </button>
 
             {errorIA ? (
@@ -648,7 +577,7 @@ export default function App() {
               </div>
             ) : !analizando ? (
               <div className="sidebar-empty">
-                <span className="sidebar-empty__glyph" aria-hidden="true">✶</span>
+                <span className="sidebar-empty__glyph" aria-hidden="true">{GLYPH_EMPTY}</span>
                 <p>
                   El archivista de IA revisará coherencia, tono y balance antes
                   de que envíes la ficha al grupo.
@@ -676,7 +605,7 @@ export default function App() {
 
             <div className="action-stack">
               <button disabled={!validacion.aprobada} onClick={copiar}>
-                <span className="btn-glyph" aria-hidden="true">❏</span>
+                <span className="btn-glyph" aria-hidden="true">{GLYPH_COPY}</span>
                 Copiar texto final
               </button>
               <button
@@ -684,14 +613,14 @@ export default function App() {
                 disabled={!validacion.aprobada}
                 onClick={compartir}
               >
-                <span className="btn-glyph" aria-hidden="true">➤</span>
+                <span className="btn-glyph" aria-hidden="true">{GLYPH_SEND}</span>
                 Enviar a WhatsApp
               </button>
             </div>
 
             <details className="preview-panel">
               <summary>
-                <span className="preview-panel__chevron" aria-hidden="true">▸</span>
+                <span className="preview-panel__chevron" aria-hidden="true">{GLYPH_CHEVRON}</span>
                 Ver vista previa del mensaje
               </summary>
               <pre>{texto}</pre>

@@ -11,7 +11,7 @@ import {
 import { esRazaValida } from "../data/razas";
 import { esReinoValido, reinoAfinARaza } from "../data/reinos";
 import { exigeTitulo } from "../data/clasesSociales";
-import { buscarEstilo } from "../data/grimorio";
+import { buscarEstilo } from "../services/grimorio";
 
 export type Estado = "ok" | "warn" | "error";
 

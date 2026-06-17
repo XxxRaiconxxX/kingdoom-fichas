@@ -1,4 +1,4 @@
-# Changelog — Kingdoom · Archivo del Trono (kingdoom-fichas)
+# Changelog — Kingdoom · Archivo del Trono (`kingdoom-fichas`)
 
 Las entradas más recientes van arriba.
 
@@ -7,24 +7,33 @@ Las entradas más recientes van arriba.
 Distribución V2 (APK de grupo). Pasada de calidad visual + cierre de funciones.
 
 ### Añadido
-- **Tipografía premium real:** Cinzel (display) + Inter Variable (cuerpo) vía `@fontsource`, empaquetadas (offline).
-- **Análisis con IA** del archivista (proxy Gemini en Vercel `analyze-ficha`): coherencia edad↔historia, raza/reino↔lore, calidad de personalidad y debilidades. Cliente `src/utils/analizarConIA.ts`.
-- **Sincronización del Grimorio** desde Supabase (`grimoire_magic_styles`) con bundle local de magias iniciales (offline + refresco automático).
-- Medidores de progreso para estadísticas (x/12) y poderes (x/5).
-- Estados de vacío / error / "ficha lista", checklist por severidad y vista previa del mensaje para WhatsApp.
-- Favicon heráldico (escudo + corona) y metadatos móviles (theme-color, safe-areas).
+
+- **Tipografía premium real:** Cinzel (display) + Inter Variable (cuerpo) vía `@fontsource`, empaquetadas para uso offline.
+- **Análisis con IA** del archivista mediante el proxy Gemini en Vercel (`analyze-ficha`). Cliente actual: `src/services/analizarConIA.ts`.
+- **Sincronización del grimorio** desde Supabase (`grimoire_magic_styles`) con bundle local de arranque para modo offline + refresco automático.
+- Medidores de progreso para estadísticas (`x/12`) y poderes (`x/5`).
+- Estados de vacío, error y ficha lista, checklist por severidad y vista previa del mensaje para WhatsApp.
+- Favicon heráldico y metadatos móviles (`theme-color`, `safe-area`).
 - Scripts npm: `sync`, `apk:debug`, `apk:release`, `android:open`.
 
 ### Cambiado
-- Rediseño visual completo: identidad noble Kingdoom (oro / carbón / violeta / azul arcano), hero con sello de estado, selects con caret propio, botones con estado táctil, animaciones suaves (respetando `prefers-reduced-motion`).
-- Microcopys y acentuación corregidos (años, validación, análisis…).
-- `versionCode` 1 → 2, `versionName` "1.0" → "2.0".
+
+- Rediseño visual completo con identidad noble Kingdoom: oro, carbón, violeta y azul arcano.
+- Hero ceremonial, tarjetas premium, panel lateral de veredicto y mejoras de lectura responsive.
+- Reorganización estructural del frontend:
+  - `src/components/` para UI reutilizable
+  - `src/services/` para cliente IA y sync remoto
+  - `src/styles/` para la capa visual
+  - `docs/` para trazabilidad del proyecto
+- Corrección de textos, acentos y documentación interna.
 
 ### Notas de build
-- APK debug generado con `npm run apk:debug` (JDK 17/21 — el JBR de Android Studio sirve — + Android SDK).
-- El binario `.apk` no se versiona en git (artefacto regenerable). Distribución por sideload; ver `dist-apk/LEEME-v2.md`.
+
+- `npm run build` validado tras la reorganización.
+- APK debug y release ya fueron generados fuera del repo con Capacitor + Gradle.
+- El binario `.apk` no se versiona en Git; se distribuye como artefacto externo.
 
 ## [1.0.0]
 
-- Base funcional: formulario de ficha, validador de reglas locales (estadísticas = 12, niveles de poderes = 5, catálogos de razas/reinos, arma/habilidades sin magia, mínimos de texto), generador de ficha aleatoria y copiar/compartir con el formato exacto de la plantilla del grupo.
+- Base funcional: formulario de ficha, validador local, generador aleatorio y salida lista para WhatsApp.
 - Proyecto Vite + React + TypeScript + Capacitor (Android).
