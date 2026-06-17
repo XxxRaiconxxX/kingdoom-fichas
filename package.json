@@ -1,19 +1,25 @@
 {
   "name": "kingdoom-fichas",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync": "npm run build && cap sync android",
+    "apk:debug": "npm run sync && cd android && gradlew.bat assembleDebug",
+    "apk:release": "npm run sync && cd android && gradlew.bat assembleRelease",
+    "android:open": "npm run sync && cap open android"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.0",
     "@capacitor/clipboard": "^8.0.1",
     "@capacitor/core": "^8.4.0",
     "@capacitor/share": "^8.0.1",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource/cinzel": "^5.2.8",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

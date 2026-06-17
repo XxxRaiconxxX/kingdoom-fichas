@@ -97,9 +97,15 @@ npm run build && npx cap sync android && npx cap open android
 ✅ **Fase 1 (base local)** — completa y verificada en navegador: formulario, validador de reglas duras, generador aleatorio, copiar/compartir con formato exacto.
 ✅ **Grimorio** — bundle + sync fusionado, verificado (reconoce magias iniciales, avisa de las desconocidas).
 ✅ **IA cliente + endpoint** — desplegado y verificado end-to-end (ver sección IA).
+✅ **APK v2.0 generado** — `dist-apk/Kingdoom-Fichas-v2.0.apk` (debug, ~4.5 MB, versionCode 2). Build CLI con `npm run apk:debug` usando el JDK de Android Studio (JBR) + SDK en `local.properties`. Instrucciones de instalación en `dist-apk/LEEME-v2.md`.
+
+### Reconstruir / distribuir
+- `npm run sync` → build web + `cap sync android`.
+- `npm run apk:debug` / `npm run apk:release` → genera el APK (necesita `JAVA_HOME` = JDK 17/21; el JBR de Android Studio sirve).
+- Release firmada para tienda: configurar keystore en `android/app/build.gradle`.
 
 ### Próximos pasos sugeridos
-- Generar el `.apk` (Android Studio) — único paso grande que queda.
+- (Opcional) Build `release` firmada si se quiere publicar en Play Store.
 - Conforme se suban magias a Supabase, el catálogo se completa solo vía sync.
 - Posible: persistir borradores de ficha (localStorage), modo "guía paso a paso" para nuevos.
 

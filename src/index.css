@@ -5,24 +5,39 @@
   --kf-bg-soft: rgba(255, 255, 255, 0.04);
   --kf-border: rgba(255, 255, 255, 0.08);
   --kf-gold: #f1b043;
+  --kf-gold-strong: #ffd479;
   --kf-gold-soft: #d7ab54;
   --kf-violet: #8d63ff;
   --kf-cyan: #60c7ff;
-  --kf-text-strong: #f5f1e8;
-  --kf-text-muted: #b5adbf;
-  --kf-text-faint: #8a8297;
+  --kf-emerald: #6fe0a3;
+  --kf-rose: #ff9b93;
+  --kf-text-strong: #f6f1e6;
+  --kf-text-muted: #b7afc1;
+  --kf-text-faint: #897f96;
   --kf-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  --kf-radius-lg: 28px;
+  --kf-radius-md: 18px;
   --kf-font-display: "Cinzel", "Cormorant Garamond", Georgia, serif;
   --kf-font-body:
-    Inter, Outfit, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    "Inter Variable", Inter, "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
+
+  /* safe-area insets (Android/iOS notch + nav bar) */
+  --kf-safe-top: env(safe-area-inset-top, 0px);
+  --kf-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --kf-safe-left: env(safe-area-inset-left, 0px);
+  --kf-safe-right: env(safe-area-inset-right, 0px);
 
   font-family: var(--kf-font-body);
   line-height: 1.5;
   font-weight: 400;
   color: var(--kf-text-muted);
   background:
-    radial-gradient(circle at top, rgba(94, 57, 13, 0.28), transparent 36%),
+    radial-gradient(1200px 620px at 50% -8%, rgba(120, 76, 18, 0.32), transparent 60%),
+    radial-gradient(900px 540px at 12% 6%, rgba(78, 44, 130, 0.18), transparent 62%),
+    radial-gradient(900px 600px at 92% 22%, rgba(34, 78, 140, 0.14), transparent 60%),
     linear-gradient(180deg, #120f18 0%, #09070d 100%);
+  background-attachment: fixed;
   color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -84,13 +99,85 @@ h3 {
   min-height: 100vh;
 }
 
+::selection {
+  background: rgba(241, 176, 67, 0.28);
+  color: var(--kf-text-strong);
+}
+
 input::placeholder,
 textarea::placeholder {
-  color: rgba(181, 173, 191, 0.48);
+  color: rgba(181, 173, 191, 0.45);
 }
 
 pre,
 code {
   font-family: "IBM Plex Mono", "Cascadia Code", "Consolas", monospace;
   font-variant-numeric: tabular-nums;
+}
+
+/* Themed scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(214, 171, 84, 0.35) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(214, 171, 84, 0.4), rgba(141, 99, 255, 0.28));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(214, 171, 84, 0.6), rgba(141, 99, 255, 0.4));
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes kf-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes kf-shimmer {
+  0% {
+    background-position: -160% 0;
+  }
+  100% {
+    background-position: 260% 0;
+  }
+}
+
+@keyframes kf-pulse-soft {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

@@ -27,9 +27,9 @@ import { generarTextoWhatsApp } from "./utils/generarTextoWhatsApp";
 import { validarFicha } from "./validation/validarFicha";
 
 const ICONO: Record<string, string> = {
-  ok: "OK",
+  ok: "✓",
   warn: "!",
-  error: "X",
+  error: "✕",
 };
 
 type CampoProps = {
@@ -86,11 +86,27 @@ function SectionCard(props: {
   );
 }
 
-function MetricCard(props: { label: string; value: string; detail: string }) {
+function MetricCard(props: {
+  label: string;
+  value: string;
+  detail: string;
+  ratio?: number;
+  tone?: "neutral" | "ok" | "over";
+}) {
+  const tone = props.tone ?? "neutral";
+  const hasMeter = typeof props.ratio === "number";
   return (
-    <div className="metric-card">
+    <div className={`metric-card metric-card--${tone}`}>
       <span className="metric-card__label">{props.label}</span>
       <strong className="metric-card__value">{props.value}</strong>
+      {hasMeter ? (
+        <span className="metric-card__meter" aria-hidden="true">
+          <span
+            className="metric-card__meter-fill"
+            style={{ transform: `scaleX(${Math.min(1, Math.max(0, props.ratio ?? 0))})` }}
+          />
+        </span>
+      ) : null}
       <span className="metric-card__detail">{props.detail}</span>
     </div>
   );
@@ -209,54 +225,65 @@ export default function App() {
             <span className="royal-mark__sigil">III</span>
             <div>
               <strong>Archivo del Trono</strong>
-              <span>Companion oficial para crear fichas dignas del reino.</span>
+              <span>Compañero oficial para forjar fichas dignas del reino.</span>
             </div>
           </div>
-          <h1>Asistente premium para crear fichas listas para WhatsApp</h1>
+          <h1>Forja fichas dignas del reino, listas para WhatsApp</h1>
           <p className="hero-card__lead">
-            Construye tu personaje con la estetica de Kingdoom, valida reglas
-            en tiempo real y remata la revision con IA antes de compartirlo.
+            Construye tu personaje con la estética de Kingdoom, valida las
+            reglas en tiempo real y remata la revisión con el archivista de IA
+            antes de compartirla.
           </p>
 
           <div className="hero-card__chips">
-            <span>Validacion local</span>
-            <span>Analisis IA</span>
-            <span>Salida exacta para bot</span>
+            <span>Validación local</span>
+            <span>Análisis con IA</span>
+            <span>Salida exacta para el bot</span>
           </div>
         </div>
 
         <div className="hero-card__visual">
           <img src={heroImage} alt="Heroe del reino" />
-          <div className="hero-card__seal">
+          <div className={`hero-card__seal ${validacion.aprobada ? "is-ok" : "is-pending"}`}>
             <span className="hero-card__seal-title">Estado del reino</span>
-            <strong>{validacion.aprobada ? "Ficha apta" : "Revision en curso"}</strong>
+            <strong>{validacion.aprobada ? "Ficha apta" : "Revisión en curso"}</strong>
             <span>
               {validacion.aprobada
                 ? "Lista para enviarse al grupo."
-                : `${validacion.errores} errores y ${validacion.avisos} avisos pendientes.`}
+                : `${validacion.errores} errores · ${validacion.avisos} avisos pendientes.`}
             </span>
           </div>
         </div>
       </header>
 
       <div className="toolbar">
-        <button onClick={aleatoria}>Ficha aleatoria</button>
+        <button onClick={aleatoria}>
+          <span className="btn-glyph" aria-hidden="true">⚄</span>
+          Ficha aleatoria
+        </button>
         <button className="button-secondary" onClick={sincronizar} disabled={sincronizando}>
-          {sincronizando ? "Sincronizando grimorio..." : "Sincronizar grimorio"}
+          <span className="btn-glyph" aria-hidden="true">⟳</span>
+          {sincronizando ? "Sincronizando grimorio…" : "Sincronizar grimorio"}
         </button>
         <button className="button-secondary" onClick={limpiar}>
+          <span className="btn-glyph" aria-hidden="true">⌫</span>
           Limpiar tablero
         </button>
       </div>
 
-      {aviso ? <div className="toast">{aviso}</div> : null}
+      {aviso ? (
+        <div className="toast" role="status">
+          <span className="toast__glyph" aria-hidden="true">✦</span>
+          <span>{aviso}</span>
+        </div>
+      ) : null}
 
       <main className="workspace">
         <div className="workspace__main">
           <SectionCard
             eyebrow="Identidad"
-            title="Nucleo del personaje"
-            description="Define la presencia base del personaje antes de entrar en combate, politica o magia."
+            title="Núcleo del personaje"
+            description="Define la presencia base del personaje antes de entrar en combate, política o magia."
           >
             <div className="field-grid field-grid--two">
               <Campo
@@ -268,7 +295,7 @@ export default function App() {
                 label="Edad"
                 value={ficha.edad}
                 onChange={(valor) => setCampo("edad", valor)}
-                placeholder="Ej: 27 / 124 anos"
+                placeholder="Ej: 27 / 124 años"
               />
               <Campo
                 label="Genero"
@@ -326,13 +353,13 @@ export default function App() {
               </div>
               <p>
                 {reinoSeleccionado
-                  ? "La seleccion ya puede cruzarse con raza, historia y tono general del personaje."
-                  : "Elegir un reino ayuda a validar coherencia cultural, politica y narrativa."}
+                  ? "La selección ya puede cruzarse con raza, historia y tono general del personaje."
+                  : "Elegir un reino ayuda a validar coherencia cultural, política y narrativa."}
               </p>
             </div>
 
             <div className="ritual-note">
-              <span className="ritual-note__title">Rito de validacion</span>
+              <span className="ritual-note__title">Rito de validación</span>
               <p>
                 Cada bloque que completes acerca la ficha a un formato estable,
                 legible y compatible con el flujo real de Kingdoom.
@@ -343,36 +370,56 @@ export default function App() {
           <SectionCard
             eyebrow="Combate y grimorio"
             title="Balance del poder"
-            description="Este bloque controla estadisticas, magia oficial y capacidades de combate del personaje."
+            description="Este bloque controla estadísticas, magia oficial y capacidades de combate del personaje."
           >
             <div className="metrics-grid">
               <MetricCard
-                label="Estadisticas"
+                label="Estadísticas"
                 value={`${sumaStats}/${PUNTOS_ESTADISTICAS}`}
+                ratio={sumaStats / PUNTOS_ESTADISTICAS}
+                tone={
+                  sumaStats === PUNTOS_ESTADISTICAS
+                    ? "ok"
+                    : restantesStats < 0
+                      ? "over"
+                      : "neutral"
+                }
                 detail={
-                  restantesStats >= 0
-                    ? `${restantesStats} puntos restantes`
-                    : `${Math.abs(restantesStats)} puntos excedidos`
+                  restantesStats > 0
+                    ? `${restantesStats} puntos por repartir`
+                    : restantesStats < 0
+                      ? `${Math.abs(restantesStats)} puntos excedidos`
+                      : "Reparto perfecto"
                 }
               />
               <MetricCard
                 label="Poderes"
                 value={`${sumaPoderes}/${PUNTOS_PODERES}`}
+                ratio={sumaPoderes / PUNTOS_PODERES}
+                tone={
+                  sumaPoderes === PUNTOS_PODERES
+                    ? "ok"
+                    : restantesPoderes < 0
+                      ? "over"
+                      : "neutral"
+                }
                 detail={
-                  restantesPoderes >= 0
-                    ? `${restantesPoderes} niveles restantes`
-                    : `${Math.abs(restantesPoderes)} niveles excedidos`
+                  restantesPoderes > 0
+                    ? `${restantesPoderes} niveles libres`
+                    : restantesPoderes < 0
+                      ? `${Math.abs(restantesPoderes)} niveles excedidos`
+                      : "Niveles completos"
                 }
               />
               <MetricCard
                 label="PV base"
                 value={`${PV_BASE}`}
-                detail="Base de referencia del reino"
+                detail="Constante del reino"
               />
             </div>
 
             <Campo
-              label={`Poderes oficiales - uno por linea con formato "Nombre Lvl X"`}
+              label={`Poderes oficiales · uno por línea con formato "Nombre Lvl X"`}
               value={ficha.poderesOficiales}
               onChange={(valor) => setCampo("poderesOficiales", valor)}
               textarea
@@ -380,7 +427,7 @@ export default function App() {
             />
 
             <fieldset className="stats-panel">
-              <legend>Distribucion de estadisticas</legend>
+              <legend>Distribución de estadísticas</legend>
               <div className="stats-grid">
                 {(Object.keys(STAT_LABELS) as (keyof Estadisticas)[]).map((clave) => (
                   <label key={clave} className="stat-card">
@@ -410,7 +457,7 @@ export default function App() {
             </div>
 
             <Campo
-              label="Habilidades no magicas"
+              label="Habilidades no mágicas"
               value={ficha.habilidadesNoMagicas}
               onChange={(valor) => setCampo("habilidadesNoMagicas", valor)}
               textarea
@@ -419,8 +466,8 @@ export default function App() {
 
           <SectionCard
             eyebrow="Rango, clase y presencia"
-            title="Posicion social del personaje"
-            description="Ajusta el estatus del personaje para que su trasfondo, acceso y trato en el mundo se sientan creibles."
+            title="Posición social del personaje"
+            description="Ajusta el estatus del personaje para que su trasfondo, acceso y trato en el mundo se sientan creíbles."
           >
             <div className="field-grid field-grid--two">
               <label className="field">
@@ -439,7 +486,7 @@ export default function App() {
               </label>
 
               <Campo
-                label="Profesion"
+                label="Profesión"
                 value={ficha.profesion}
                 onChange={(valor) => setCampo("profesion", valor)}
               />
@@ -447,7 +494,7 @@ export default function App() {
 
             {exigeTitulo(ficha.claseSocial) ? (
               <Campo
-                label="Titulo de nobleza"
+                label="Título de nobleza"
                 value={ficha.tituloNobleza}
                 onChange={(valor) => setCampo("tituloNobleza", valor)}
               />
@@ -472,7 +519,7 @@ export default function App() {
           <SectionCard
             eyebrow="Narrativa final"
             title="Historia, presencia e inventario"
-            description="La IA y la validacion del reino dependen mucho de este bloque para medir coherencia real."
+            description="La IA y la validación del reino dependen mucho de este bloque para medir la coherencia real."
           >
             <Campo
               label="Historia"
@@ -497,7 +544,7 @@ export default function App() {
             </div>
 
             <Campo
-              label="Imagen o descripcion visual"
+              label="Imagen o descripción visual"
               value={ficha.imagenDescripcion}
               onChange={(valor) => setCampo("imagenDescripcion", valor)}
               textarea
@@ -509,9 +556,12 @@ export default function App() {
           <section className="sidebar-card sidebar-card--status">
             <p className="eyebrow">Panel de veredicto</p>
             <div className={`summary-pill ${validacion.aprobada ? "is-ok" : "is-error"}`}>
+              <span className="summary-pill__glyph" aria-hidden="true">
+                {validacion.aprobada ? "✓" : "✕"}
+              </span>
               {validacion.aprobada
                 ? "Ficha lista para el reino"
-                : `${validacion.errores} errores y ${validacion.avisos} avisos activos`}
+                : `${validacion.errores} errores · ${validacion.avisos} avisos activos`}
             </div>
 
             <div className="sidebar-metrics">
@@ -531,7 +581,7 @@ export default function App() {
           <section className="sidebar-card">
             <div className="sidebar-card__head">
               <p className="eyebrow">Checklist del reino</p>
-              <h3>Revision automatica</h3>
+              <h3>Revisión automática</h3>
             </div>
             <ul className="checklist">
               {validacion.resultados.map((resultado, index) => (
@@ -549,21 +599,30 @@ export default function App() {
           <section className="sidebar-card sidebar-card--ia">
             <div className="sidebar-card__head">
               <p className="eyebrow">Consejo del archivista</p>
-              <h3>Analisis con IA</h3>
+              <h3>Análisis con IA</h3>
             </div>
 
-            <button className="button-ia" onClick={analizarIA} disabled={analizando}>
-              {analizando ? "Analizando ficha..." : "Analizar con IA"}
+            <button
+              className={`button-ia ${analizando ? "is-loading" : ""}`}
+              onClick={analizarIA}
+              disabled={analizando}
+            >
+              {analizando ? "Consultando al archivista…" : "Analizar con IA"}
             </button>
 
-            {errorIA ? <div className="ia-error-box">{errorIA}</div> : null}
+            {errorIA ? (
+              <div className="ia-error-box">
+                <span className="ia-error-box__glyph" aria-hidden="true">!</span>
+                <span>{errorIA}</span>
+              </div>
+            ) : null}
 
             {analisis ? (
               <div className={`ia-result ia-result--${analisis.veredicto}`}>
                 <div className="ia-result__banner">
                   <strong>
                     {analisis.veredicto === "aprobada"
-                      ? "La IA ve una ficha solida"
+                      ? "La IA ve una ficha sólida"
                       : "La IA recomienda pulir la ficha"}
                   </strong>
                   <span>{analisis.veredicto}</span>
@@ -587,12 +646,15 @@ export default function App() {
                   ))}
                 </ul>
               </div>
-            ) : (
-              <p className="sidebar-empty">
-                El analisis IA te ayudara a reforzar coherencia, tono y balance
-                antes de enviar la ficha.
-              </p>
-            )}
+            ) : !analizando ? (
+              <div className="sidebar-empty">
+                <span className="sidebar-empty__glyph" aria-hidden="true">✶</span>
+                <p>
+                  El archivista de IA revisará coherencia, tono y balance antes
+                  de que envíes la ficha al grupo.
+                </p>
+              </div>
+            ) : null}
           </section>
 
           <section className="sidebar-card">
@@ -601,8 +663,20 @@ export default function App() {
               <h3>Entrega para WhatsApp</h3>
             </div>
 
+            {!validacion.aprobada ? (
+              <p className="action-hint">
+                Resuelve los {validacion.errores} errores del checklist para
+                desbloquear la entrega.
+              </p>
+            ) : (
+              <p className="action-hint action-hint--ready">
+                Todo en orden. La ficha está lista para el grupo.
+              </p>
+            )}
+
             <div className="action-stack">
               <button disabled={!validacion.aprobada} onClick={copiar}>
+                <span className="btn-glyph" aria-hidden="true">❏</span>
                 Copiar texto final
               </button>
               <button
@@ -610,12 +684,16 @@ export default function App() {
                 disabled={!validacion.aprobada}
                 onClick={compartir}
               >
+                <span className="btn-glyph" aria-hidden="true">➤</span>
                 Enviar a WhatsApp
               </button>
             </div>
 
             <details className="preview-panel">
-              <summary>Ver texto final</summary>
+              <summary>
+                <span className="preview-panel__chevron" aria-hidden="true">▸</span>
+                Ver vista previa del mensaje
+              </summary>
               <pre>{texto}</pre>
             </details>
           </section>
