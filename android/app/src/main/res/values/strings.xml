@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kingdoom Fichas</string>
+    <string name="title_activity_main">Kingdoom Fichas</string>
+    <string name="package_name">com.kingdoom.fichas</string>
+    <string name="custom_url_scheme">com.kingdoom.fichas</string>
+</resources>

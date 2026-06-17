@@ -1,0 +1,96 @@
+:root {
+  --kf-bg: #0b0910;
+  --kf-bg-elevated: #15111c;
+  --kf-bg-panel: #1b1622;
+  --kf-bg-soft: rgba(255, 255, 255, 0.04);
+  --kf-border: rgba(255, 255, 255, 0.08);
+  --kf-gold: #f1b043;
+  --kf-gold-soft: #d7ab54;
+  --kf-violet: #8d63ff;
+  --kf-cyan: #60c7ff;
+  --kf-text-strong: #f5f1e8;
+  --kf-text-muted: #b5adbf;
+  --kf-text-faint: #8a8297;
+  --kf-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  --kf-font-display: "Cinzel", "Cormorant Garamond", Georgia, serif;
+  --kf-font-body:
+    Inter, Outfit, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  font-family: var(--kf-font-body);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--kf-text-muted);
+  background:
+    radial-gradient(circle at top, rgba(94, 57, 13, 0.28), transparent 36%),
+    linear-gradient(180deg, #120f18 0%, #09070d 100%);
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  overscroll-behavior-y: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--kf-font-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(181, 173, 191, 0.48);
+}
+
+pre,
+code {
+  font-family: "IBM Plex Mono", "Cascadia Code", "Consolas", monospace;
+  font-variant-numeric: tabular-nums;
+}

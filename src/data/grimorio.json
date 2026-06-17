@@ -1,0 +1,374 @@
+[
+  {
+    "id": "runas-de-proteccion",
+    "title": "Runas de Protección",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "runas-de-ataque",
+    "title": "Runas de Ataque",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "runas-de-trampa",
+    "title": "Runas de Trampa",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "runas-de-mejora-de-equipo",
+    "title": "Runas de Mejora de Equipo",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "escritura-runica-en-el-aire",
+    "title": "Escritura Rúnica en el Aire",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "transmutacion-de-materia",
+    "title": "Transmutación de Materia",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "creacion-de-pociones",
+    "title": "Creación de Pociones",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "homunculos-y-vida-artificial",
+    "title": "Homúnculos y Vida Artificial",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "dilatacion-temporal",
+    "title": "Dilatación Temporal",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "retroceso-temporal",
+    "title": "Retroceso Temporal",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "espiritus-elementales",
+    "title": "Espíritus Elementales",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "vision-del-futuro",
+    "title": "Visión del Futuro",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "teletransportacion",
+    "title": "Teletransportación",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "distorsion-espacial",
+    "title": "Distorsión Espacial",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "dimensiones-de-bolsillo",
+    "title": "Dimensiones de Bolsillo",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "telepatia-y-lectura-de-mentes",
+    "title": "Telepatía y Lectura de Mentes",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "armas-espirituales",
+    "title": "Armas Espirituales",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "magia-de-gravedad",
+    "title": "Magia de Gravedad",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "magia-de-gravedad-enfoque-coloso-de-rush",
+    "title": "Magia de Gravedad (Enfoque: Coloso de Rush)",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "magia-de-gravedad-el-coloso-deva-full-rush",
+    "title": "Magia de Gravedad: El Coloso Deva (Full Rush)",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "bestias-divinas",
+    "title": "Bestias Divinas",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "magia-de-soporte-eter-sintonia",
+    "title": "Magia de Soporte: Eter-Sintonía",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "invocacion-de-objetos",
+    "title": "Invocación de Objetos",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "invocacion-de-sombras",
+    "title": "Invocación de Sombras",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "espiritus-de-la-naturaleza",
+    "title": "Espíritus de la Naturaleza",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "espiritus-heroicos",
+    "title": "Espíritus Heroicos",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "seres-celestiales-demoniacos",
+    "title": "Seres Celestiales / Demoníacos",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "creacion-de-tulpa",
+    "title": "Creación de Tulpa",
+    "categoria": "Inicial",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "tejido-de-resonancia-vegetal",
+    "title": "Tejido de Resonancia Vegetal",
+    "categoria": "Elemental",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "magia-de-plasma-y-energia-pura",
+    "title": "Magia de Plasma y Energia Pura",
+    "categoria": "Elemental",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "id": "magia-de-solidificacion-y-cristalizacion-entropica",
+    "title": "Magia de Solidificación y Cristalización Entrópica",
+    "categoria": "Elemental",
+    "niveles": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  }
+]
