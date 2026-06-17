@@ -385,6 +385,10 @@ button:disabled {
   color: var(--kf-gold);
 }
 
+.mobile-guidance-strip {
+  display: none;
+}
+
 /* ============ WORKSPACE ============ */
 .workspace {
   position: relative;
@@ -1167,45 +1171,143 @@ select:focus-visible {
   .app-shell {
     width: 100%;
     padding:
-      calc(16px + var(--kf-safe-top))
-      calc(14px + var(--kf-safe-right))
-      calc(28px + var(--kf-safe-bottom))
-      calc(14px + var(--kf-safe-left));
+      calc(12px + var(--kf-safe-top))
+      calc(12px + var(--kf-safe-right))
+      calc(24px + var(--kf-safe-bottom))
+      calc(12px + var(--kf-safe-left));
   }
 
   .hero-card,
   .section-card,
   .sidebar-card {
-    padding: 18px;
-    border-radius: 22px;
+    padding: 14px;
+    border-radius: 16px;
   }
 
   .hero-card {
-    gap: 18px;
+    gap: 12px;
+    margin-bottom: 14px;
   }
 
   .hero-card h1 {
-    font-size: clamp(1.85rem, 7vw, 2.4rem);
+    margin-bottom: 0;
+    font-size: 1.34rem;
+    line-height: 1.08;
   }
 
-  .hero-card__visual {
-    min-height: 220px;
+  .hero-card__lead,
+  .hero-card__chips,
+  .hero-card__visual,
+  .section-card__description,
+  .kingdom-ribbon p,
+  .ritual-note {
+    display: none;
   }
 
-  .hero-card__seal {
-    left: 14px;
-    right: 14px;
-    bottom: 14px;
-    padding: 13px 15px;
+  .royal-mark {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 9px 12px;
+    border-radius: 14px;
+  }
+
+  .royal-mark__sigil {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+
+  .royal-mark span:last-child {
+    display: none;
   }
 
   .toolbar {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  button {
+    min-height: 46px;
+    padding-inline: 14px;
+    border-radius: 13px;
+    font-size: 0.92rem;
+  }
+
+  .mobile-guidance-strip {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 10px;
+    margin: 0 -12px 14px;
+    padding: 0 12px 4px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .mobile-guidance-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-guidance-card {
+    min-width: min(78vw, 292px);
+    scroll-snap-align: start;
+    padding: 12px 13px;
+    border-radius: 14px;
+    border: 1px solid rgba(214, 171, 84, 0.18);
+    background: linear-gradient(135deg, rgba(23, 19, 30, 0.96), rgba(15, 13, 22, 0.96));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  }
+
+  .mobile-guidance-card span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--kf-gold-soft);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .mobile-guidance-card strong {
+    display: block;
+    color: var(--kf-text-strong);
+    font-size: 0.94rem;
+    line-height: 1.25;
+  }
+
+  .mobile-guidance-card p {
+    margin: 6px 0 0;
+    color: var(--kf-text-muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .workspace,
+  .workspace__main,
+  .workspace__sidebar {
+    gap: 14px;
+  }
+
+  .section-card__head,
+  .sidebar-card__head {
+    margin-bottom: 12px;
   }
 
   .section-card__head h2 {
-    font-size: 1.3rem;
+    font-size: 1.04rem;
+  }
+
+  .sidebar-card__head h3 {
+    font-size: 1rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 7px;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
   }
 
   .field-grid--two,
@@ -1216,14 +1318,103 @@ select:focus-visible {
 
   .kingdom-ribbon {
     grid-template-columns: 1fr;
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 16px;
   }
 
-  .royal-mark {
-    grid-template-columns: auto 1fr;
+  input,
+  textarea,
+  select {
+    min-height: 48px;
+    padding: 12px 14px;
+    border-radius: 13px;
+  }
+
+  textarea {
+    min-height: 104px;
+    line-height: 1.5;
+  }
+
+  .metric-card,
+  .stat-card,
+  .checklist__item {
+    border-radius: 14px;
+  }
+
+  .metric-card {
+    padding: 13px;
+  }
+
+  .metric-card__value {
+    font-size: 1.16rem;
   }
 
   .checklist {
-    max-height: none;
+    max-height: 286px;
+  }
+
+  .checklist__item {
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    padding: 10px 11px;
+  }
+
+  .checklist__badge {
+    width: 28px;
+    height: 28px;
+  }
+
+  .checklist__item strong {
+    font-size: 0.86rem;
+  }
+
+  .checklist__item p {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .ia-result {
+    padding: 12px;
+    border-radius: 15px;
+  }
+
+  .ia-result__banner {
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .ia-result__banner strong {
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+
+  .ia-result__summary {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .ia-suggestion {
+    padding: 11px 12px;
+    border-radius: 14px;
+  }
+
+  .ia-suggestion__top {
+    margin-bottom: 6px;
+  }
+
+  .ia-suggestion__top strong {
+    font-size: 0.86rem;
+  }
+
+  .ia-suggestion p,
+  .ia-suggestion__hint {
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .preview-panel pre {
+    max-height: 260px;
   }
 }
 

@@ -1,5 +1,42 @@
 # AI_CHANGELOG
 
+## 2026-06-17 - [Codex] Empaquetado V3 del APK
+
+- Se alineo el versionado del proyecto a `3.0.0` en `package.json`.
+- Se actualizo Android a `versionCode 3` y `versionName 3.0`.
+- Se preparo la nueva salida de distribucion como V3 para separar esta iteracion compacta de la V2 previa.
+
+### Validacion
+
+- `npm run sync`
+- `npm run apk:debug` con `JAVA_HOME=C:\Program Files\Android\Android Studio\jbr`
+
+### Riesgos abiertos
+
+- La V3 generada sigue siendo una build debug para distribucion por sideload, no una release firmada para tienda.
+
+## 2026-06-17 - [Codex] Ajuste mobile compacto para APK V2
+
+- Se revisó el feedback de saturación visual en teléfono y se ajustó el layout responsive del APK V2.
+- Se corrigió el estado visual del sello superior para usar las clases reales `is-ok` / `is-pending`.
+- En mobile se redujo la densidad inicial:
+  - se ocultan textos ornamentales largos del hero
+  - se oculta la imagen hero para priorizar formulario y acciones
+  - se compactan paddings, radios, botones, campos y métricas
+  - se limita la altura del checklist y la vista previa para evitar pantallas verticales interminables
+- Se agregó un carrusel horizontal móvil de resumen para que la lectura de reino, validación e IA no interrumpa el formulario.
+- Se compactaron tarjetas del checklist y sugerencias IA para conservar el valor de corrección sin alargar tanto la pantalla.
+- Se regeneró localmente `dist-apk/Kingdoom-Fichas-v2.0.apk` desde el debug APK recién compilado.
+
+### Validación
+
+- `npm run sync`
+- `npm run apk:debug` con `JAVA_HOME=C:\Program Files\Android\Android Studio\jbr`
+
+### Riesgos abiertos
+
+- No se hizo prueba visual dentro de emulador físico/Android Studio en esta pasada; la validación fue por build y revisión del CSS responsive.
+
 ## 2026-06-17 - [Codex] Rediseño premium inicial y preparación de repositorio
 
 - Se rehizo el frontend principal de `kingdoom-fichas` con una dirección visual más cercana a Kingdoom:

@@ -173,7 +173,7 @@ export default function App() {
 
         <div className="hero-card__visual">
           <img src={heroImage} alt="Heroe del reino" />
-          <div className={`hero-card__seal ${validacion.aprobada ? ICONO.ok : ICONO.error}`}>
+          <div className={`hero-card__seal ${validacion.aprobada ? "is-ok" : "is-pending"}`}>
             <span className="hero-card__seal-title">Estado del reino</span>
             <strong>{validacion.aprobada ? "Ficha apta" : "Revisión en curso"}</strong>
             <span>
@@ -206,6 +206,32 @@ export default function App() {
           <span>{aviso}</span>
         </div>
       ) : null}
+
+      <section className="mobile-guidance-strip" aria-label="Resumen movil de la ficha">
+        <article className="mobile-guidance-card">
+          <span>Reino</span>
+          <strong>{reinoSeleccionado?.nombre ?? "Sin reino"}</strong>
+          <p>
+            {reinoSeleccionado
+              ? "Se usara para cruzar raza, historia y tono."
+              : "Elige un reino para activar lectura de contexto."}
+          </p>
+        </article>
+        <article className="mobile-guidance-card">
+          <span>Validacion</span>
+          <strong>{validacion.aprobada ? "Lista" : `${validacion.errores} errores`}</strong>
+          <p>
+            {validacion.aprobada
+              ? "La ficha puede copiarse o enviarse."
+              : `${validacion.avisos} avisos adicionales por revisar.`}
+          </p>
+        </article>
+        <article className="mobile-guidance-card">
+          <span>IA</span>
+          <strong>Correccion tematica</strong>
+          <p>El archivista revisa coherencia con el lore del grupo.</p>
+        </article>
+      </section>
 
       <main className="workspace">
         <div className="workspace__main">
