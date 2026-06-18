@@ -12,6 +12,8 @@ import { REINOS } from "./data/reinos";
 import {
   type Estadisticas,
   type Ficha,
+  edadNumerica,
+  obtenerRequisitoHistoriaPorEdad,
   PUNTOS_ESTADISTICAS,
   PUNTOS_PODERES,
   PV_BASE,
@@ -72,6 +74,15 @@ export default function App() {
   const sumaPoderes = sumaNivelesPoderes(ficha.poderesOficiales);
   const restantesPoderes = PUNTOS_PODERES - sumaPoderes;
   const reinoSeleccionado = REINOS.find((reino) => reino.nombre === ficha.reino);
+  const edadDetectada = edadNumerica(ficha.edad);
+  const requisitoHistoria = useMemo(
+    () => obtenerRequisitoHistoriaPorEdad(edadDetectada),
+    [edadDetectada],
+  );
+  const avisoEdadAlta =
+    edadDetectada !== null && edadDetectada >= 100
+      ? `Una edad de ${edadDetectada} años exige al menos ${requisitoHistoria.minPalabras} palabras y ${requisitoHistoria.minParrafos} párrafos en la historia.`
+      : "";
 
   async function sincronizar() {
     setSincronizando(true);
@@ -264,6 +275,13 @@ export default function App() {
                 placeholder="Ej: 1.80 m"
               />
             </div>
+
+            {avisoEdadAlta ? (
+              <div className="field-note field-note--age">
+                <strong>Edad de larga vida detectada.</strong>
+                <span>{avisoEdadAlta}</span>
+              </div>
+            ) : null}
 
             <div className="field-grid field-grid--two">
               <label className="field">

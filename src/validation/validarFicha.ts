@@ -1,12 +1,15 @@
 import {
   type Ficha,
+  contarPalabras,
+  contarParrafos,
+  edadNumerica,
+  MAX_EDAD_PERSONAJE,
+  MINIMOS_PALABRAS,
   PUNTOS_ESTADISTICAS,
   PUNTOS_PODERES,
-  MINIMOS_PALABRAS,
-  sumaEstadisticas,
+  obtenerRequisitoHistoriaPorEdad,
   parsearPoderes,
-  contarPalabras,
-  edadNumerica,
+  sumaEstadisticas,
 } from "../schema/fichaSchema";
 import { esRazaValida } from "../data/razas";
 import { esReinoValido, reinoAfinARaza } from "../data/reinos";
@@ -92,6 +95,8 @@ export function validarFicha(ficha: Ficha): ResultadoValidacion {
     r.push(error("Edad", "Falta la edad."));
   } else if (edadNum === null) {
     r.push(warn("Edad", "No se detecta un número de edad claro."));
+  } else if (edadNum > MAX_EDAD_PERSONAJE) {
+    r.push(error("Edad", `La edad supera el máximo permitido de ${MAX_EDAD_PERSONAJE} años.`));
   } else {
     r.push(ok("Edad"));
   }
@@ -234,17 +239,28 @@ export function validarFicha(ficha: Ficha): ResultadoValidacion {
 
   // Historia (mínimo exigente, escala con edad)
   const palHist = contarPalabras(ficha.historia);
-  let minHist: number = MINIMOS_PALABRAS.historia;
-  if (edadNum !== null && edadNum > 100) {
-    // +20 palabras por cada siglo de vida, tope razonable.
-    const siglos = Math.floor(edadNum / 100);
-    minHist = Math.min(MINIMOS_PALABRAS.historia + siglos * 20, 600);
-  }
+  const parrafosHistoria = contarParrafos(ficha.historia);
+  const requisitoHistoria = obtenerRequisitoHistoriaPorEdad(edadNum);
   if (vacio(ficha.historia)) {
     r.push(error("Historia", "Falta la historia."));
-  } else if (palHist < minHist) {
-    const extra = edadNum !== null && edadNum > 100 ? ` Para una edad de ${edadNum}, se espera más trasfondo.` : "";
-    r.push(error("Historia", `Demasiado corta (${palHist} palabras; se esperan ≥ ${minHist}).${extra}`));
+  } else if (palHist < requisitoHistoria.minPalabras) {
+    const extra =
+      edadNum !== null
+        ? ` Para una edad de ${edadNum}, el piso narrativo sube a ${requisitoHistoria.minPalabras} palabras.`
+        : "";
+    r.push(
+      error(
+        "Historia",
+        `Demasiado corta (${palHist} palabras; se esperan ≥ ${requisitoHistoria.minPalabras}).${extra}`,
+      ),
+    );
+  } else if (parrafosHistoria < requisitoHistoria.minParrafos) {
+    r.push(
+      error(
+        "Historia",
+        `La historia necesita más etapas legibles (${parrafosHistoria} párrafos; se esperan ≥ ${requisitoHistoria.minParrafos}).`,
+      ),
+    );
   } else {
     r.push(ok("Historia"));
   }

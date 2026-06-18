@@ -1,5 +1,55 @@
 # AI_CHANGELOG
 
+## 2026-06-18 - [Codex] Registro de release V5 para GitHub
+
+- Se alineó el proyecto a la línea de distribución **V5**:
+  - `package.json` → `5.0.0`
+  - Android → `versionCode 5` / `versionName 5.0`
+  - GitHub Actions → artefacto `Kingdoom-Fichas-v5.0-APK`
+- Se actualizó el changelog público del producto para dejar trazado que V5 incorpora el endurecimiento narrativo por edad, longevidad racial y aviso textual de edades altas.
+- Se actualizó el `HANDOFF.md` para que los próximos agentes partan desde V5 y no desde la referencia vieja de V4.
+
+### Validación
+
+- `npx tsc --noEmit`
+- `npm run build`
+
+### Riesgos abiertos
+
+- La parte cliente ya quedó lista para V5, pero la mejora completa del análisis IA sigue dependiendo de que el endpoint remoto use de forma explícita `contextoNarrativo`.
+
+## 2026-06-18 - [Codex] Endurecimiento narrativo por edad y longevidad
+
+- Se centralizaron en `src/schema/fichaSchema.ts` las nuevas reglas de narrativa por edad:
+  - tope máximo de `900` años
+  - escala de palabras por tramo
+  - escala de párrafos mínimos por tramo
+  - helper compartido para `normal`, `prolongada` y `legendaria`
+- Se reforzó `src/utils/generarFichaAleatoria.ts` para que la edad aleatoria respete la nueva tabla de longevidad por raza y no vuelva a generar extremos fuera del techo acordado.
+- La historia aleatoria ahora se postprocesa con expansión por edad:
+  - corrige varios casos de concordancia femenina en las plantillas actuales
+  - añade capas narrativas extra para edades altas
+  - fuerza el crecimiento de párrafos y densidad histórica según la edad detectada
+- `src/validation/validarFicha.ts` ahora bloquea por:
+  - edad superior a `900`
+  - historia por debajo del mínimo de palabras del tramo
+  - historia por debajo del mínimo de párrafos del tramo
+- `src/App.tsx` ahora muestra un aviso textual inmediato cuando detecta edades de `100+`, informando el piso narrativo requerido antes del análisis.
+- `src/services/analizarConIA.ts` empezó a enviar `contextoNarrativo` al endpoint con:
+  - `edadNumerica`
+  - `longevidadRaza`
+  - `requisitoHistoria`
+  - flag para revisión de pronombres según género
+
+### Validación
+
+- `npx tsc --noEmit`
+- `npm run build`
+
+### Riesgos abiertos
+
+- La corrección fuerte de pronombres y profundidad narrativa en la IA quedó preparada desde el cliente, pero depende de que el endpoint remoto consuma `contextoNarrativo` y lo incorpore explícitamente en su prompt.
+
 ## 2026-06-18 - [Antigravity] Empaquetado V4 del APK
 
 - Se alineó el versionado del proyecto a `4.0.0` en `package.json`.

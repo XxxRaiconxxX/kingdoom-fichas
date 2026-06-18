@@ -2,6 +2,30 @@
 
 Las entradas más recientes van arriba.
 
+## [5.0.0] — 2026-06-18
+
+Distribución V5. Endurecimiento narrativo por edad + preparación del release en GitHub.
+
+### Añadido
+
+- **Reglas narrativas por edad** centralizadas con tres clases de longevidad racial: `normal`, `prolongada` y `legendaria`.
+- **Techo oficial de edad** en `900` años para el ecosistema de fichas.
+- **Aviso textual inmediato** en la UI cuando la edad detectada exige una historia reforzada.
+- **Contexto narrativo estructurado** enviado al análisis IA: edad numérica, longevidad racial, requisito de historia y revisión de pronombres.
+
+### Cambiado
+
+- El generador aleatorio ya no usa el esquema viejo de longevidad y ahora reparte edades por porcentaje según la raza.
+- Las historias generadas se expanden según la edad del personaje para cumplir mejor con densidad, etapas vitales y extensión mínima.
+- La validación local ahora bloquea historias insuficientes no solo por palabras, sino también por párrafos mínimos según tramo etario.
+- La versión del proyecto pasa a `5.0.0`, Android a `versionCode 5` / `versionName 5.0`, y el artefacto de GitHub Actions se publica como `Kingdoom-Fichas-v5.0-APK`.
+
+### Notas de build
+
+- `npx tsc --noEmit` validado.
+- `npm run build` validado.
+- La APK V5 queda preparada para compilarse desde GitHub Actions en cada push a `main` o por ejecución manual del workflow.
+
 ## [2.0.0] — 2026-06-17
 
 Distribución V2 (APK de grupo). Pasada de calidad visual + cierre de funciones.

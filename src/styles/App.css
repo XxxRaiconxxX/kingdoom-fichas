@@ -499,6 +499,29 @@ button:disabled {
   gap: 8px;
 }
 
+.field-note {
+  margin-top: 16px;
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 215, 130, 0.18);
+  background:
+    linear-gradient(135deg, rgba(255, 196, 92, 0.12), rgba(107, 72, 255, 0.08)),
+    rgba(12, 9, 18, 0.72);
+}
+
+.field-note strong {
+  color: var(--kf-text-strong);
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+.field-note span {
+  color: var(--kf-text-muted);
+  line-height: 1.65;
+}
+
 .field__label {
   font-size: 0.78rem;
   letter-spacing: 0.04em;

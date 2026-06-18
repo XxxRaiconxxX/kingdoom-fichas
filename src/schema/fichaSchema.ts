@@ -31,6 +31,15 @@ export interface Ficha {
   imagenDescripcion: string;
 }
 
+export type CategoriaLongevidad = "normal" | "prolongada" | "legendaria";
+
+export interface RequisitoHistoriaPorEdad {
+  minPalabras: number;
+  maxPalabras: number;
+  minParrafos: number;
+  avisoLongevidadExtrema: boolean;
+}
+
 // Total de puntos a repartir entre las 5 estadísticas.
 export const PUNTOS_ESTADISTICAS = 12;
 export const PV_BASE = 100;
@@ -44,6 +53,69 @@ export const MINIMOS_PALABRAS = {
   personalidad: 40, // medio
   debilidades: 15, // suave
 } as const;
+
+export const MAX_EDAD_PERSONAJE = 900;
+
+const RAZAS_VIDA_PROLONGADA = new Set([
+  "Elfos de Sangre",
+  "Elfos de la Noche",
+  "Elfos Silvanos",
+  "Altos Elfos",
+  "Enanos de las Montañas",
+  "Enanos Oscuros",
+  "Gnomos de las Profundidades",
+  "Gnomos de Jardín",
+  "Trolls de Selva",
+  "Trolls de Hielo",
+  "Onis",
+  "Tanuki",
+  "Nagas",
+  "Sirenas y Tritones",
+  "Hombres Medusa",
+  "Aasimar",
+  "Diablillos",
+  "Gritones",
+  "Hadas",
+  "Pixies",
+  "Ninfas de Agua",
+  "Dríadas",
+  "Salamandras",
+  "Mujeres de Nieve",
+  "Cíclopes",
+  "Lamias",
+  "Gorgonas",
+  "Manticoras",
+  "Wyverns Sapientes",
+  "Basiliscos Humanoides",
+]);
+
+const RAZAS_VIDA_LEGENDARIA = new Set([
+  "Ángeles de las Virtudes",
+  "Serafines",
+  "Querubines",
+  "Ángeles Caídos",
+  "Nephilim",
+  "Demonios de Clase Alta",
+  "Súcubos e Íncubos",
+  "Ethereals",
+  "Cuerpos de Éter",
+  "Sombras Vivientes",
+  "Vampiros Sangre Pura",
+  "Liches",
+  "Esqueletos Guerrero",
+  "Ghouls",
+  "Dullahan",
+  "Espectros",
+  "Espíritus del Bosque",
+  "Ents",
+  "Gigantes de Fuego",
+  "Gigantes de Escarcha",
+  "Titanes",
+  "Golems de Piedra",
+  "Golems de Cristal",
+  "Autómatas de Vapor",
+  "Dragones Celestiales",
+]);
 
 export const STAT_LABELS: Record<keyof Estadisticas, string> = {
   fuerza: "Fuerza",
@@ -94,10 +166,74 @@ export function contarPalabras(texto: string): number {
   return t.split(/\s+/).length;
 }
 
+export function contarParrafos(texto: string): number {
+  const t = texto.trim();
+  if (!t) return 0;
+  return t
+    .split(/\n\s*\n/)
+    .map((bloque) => bloque.trim())
+    .filter(Boolean).length;
+}
+
 // Extrae un número de edad de un texto libre ("1200 años" -> 1200). null si no hay.
 export function edadNumerica(edad: string): number | null {
   const m = edad.replace(/[.,](?=\d{3}\b)/g, "").match(/\d+/);
   return m ? parseInt(m[0], 10) : null;
+}
+
+export function obtenerRequisitoHistoriaPorEdad(
+  edad: number | null,
+): RequisitoHistoriaPorEdad {
+  if (edad === null || edad < 40) {
+    return {
+      minPalabras: 330,
+      maxPalabras: 370,
+      minParrafos: 4,
+      avisoLongevidadExtrema: false,
+    };
+  }
+
+  if (edad < 100) {
+    return {
+      minPalabras: 370,
+      maxPalabras: 430,
+      minParrafos: 8,
+      avisoLongevidadExtrema: false,
+    };
+  }
+
+  if (edad < 300) {
+    return {
+      minPalabras: 430,
+      maxPalabras: 530,
+      minParrafos: 10,
+      avisoLongevidadExtrema: false,
+    };
+  }
+
+  if (edad < 700) {
+    return {
+      minPalabras: 530,
+      maxPalabras: 670,
+      minParrafos: 12,
+      avisoLongevidadExtrema: false,
+    };
+  }
+
+  return {
+    minPalabras: 670,
+    maxPalabras: 850,
+    minParrafos: 15,
+    avisoLongevidadExtrema: true,
+  };
+}
+
+export function obtenerCategoriaLongevidadPorRaza(
+  raza: string,
+): CategoriaLongevidad {
+  if (RAZAS_VIDA_LEGENDARIA.has(raza)) return "legendaria";
+  if (RAZAS_VIDA_PROLONGADA.has(raza)) return "prolongada";
+  return "normal";
 }
 
 export interface PoderParseado {

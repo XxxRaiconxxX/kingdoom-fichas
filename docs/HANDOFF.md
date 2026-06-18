@@ -81,7 +81,7 @@ npm run build
 - Se configuró un flujo de automatización en `.github/workflows/build-apk.yml` de GitHub Actions.
 - Se ejecuta automáticamente con cada `push` en `main` o manualmente mediante `workflow_dispatch`.
 - Requiere **Node 22** y **Java 21** (configurados automáticamente en la VM de GitHub `ubuntu-latest`).
-- La APK compilada queda disponible como un artefacto descargable (`Kingdoom-Fichas-v4.0-APK`) en GitHub.
+- La APK compilada queda disponible como un artefacto descargable (`Kingdoom-Fichas-v5.0-APK`) en GitHub.
 
 **Compilación Local:**
 ```bash
@@ -168,7 +168,8 @@ Estado verificado:
 
 - **Reescritura del generador de fichas (`generarFichaAleatoria.ts`):** Completamente rediseñado con pools realistas y coherentes de nombres, apellidos, apodos, edades por raza (según longevidad), profesiones según clase social, estilos de combate tácticos extensos, habilidades y debilidades profundas, y 5 plantillas narrativas de historia con variables dinámicas.
 - **Compilación en la Nube (GitHub Actions):** Automatización del empaquetado del APK de depuración con Node 22 y Java 21 ante pushes o ejecuciones manuales.
-- **Versión del proyecto alineada a V4.0.0** (`versionCode 4` / `versionName 4.0` en Gradle y `package.json`).
+- **Versión del proyecto alineada a V5.0.0** (`versionCode 5` / `versionName 5.0` en Gradle y `package.json`).
+- **Reglas narrativas reforzadas:** la app ya trabaja con techo de `900` años, clases de longevidad por raza y pisos narrativos duros de palabras + párrafos por tramo etario.
 - UI premium y responsive integrada en móvil y escritorio.
 
 ---

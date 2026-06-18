@@ -1,4 +1,15 @@
-import { type Ficha, type Estadisticas, PUNTOS_ESTADISTICAS, PUNTOS_PODERES } from "../schema/fichaSchema";
+import {
+  type CategoriaLongevidad,
+  type Ficha,
+  type Estadisticas,
+  MAX_EDAD_PERSONAJE,
+  PUNTOS_ESTADISTICAS,
+  PUNTOS_PODERES,
+  contarPalabras,
+  edadNumerica,
+  obtenerCategoriaLongevidadPorRaza,
+  obtenerRequisitoHistoriaPorEdad,
+} from "../schema/fichaSchema";
 import { RAZAS } from "../data/razas";
 import { REINOS } from "../data/reinos";
 import { CLASES_SOCIALES } from "../data/clasesSociales";
@@ -93,10 +104,33 @@ const RAZAS_LONGEVAS: readonly string[] = [
   "Esqueletos Guerrero", "Ghouls",
 ];
 
+void RAZAS_LONGEVAS_EXTREMAS;
+void RAZAS_LONGEVAS;
+
+function tirarPorcentaje(): number {
+  return Math.random() * 100;
+}
+
 function generarEdad(raza: string): string {
-  if (RAZAS_LONGEVAS_EXTREMAS.includes(raza)) return `${randInt(200, 1200)}`;
-  if (RAZAS_LONGEVAS.includes(raza)) return `${randInt(60, 500)}`;
-  return `${randInt(18, 65)}`;
+  const categoria = obtenerCategoriaLongevidadPorRaza(raza);
+  const roll = tirarPorcentaje();
+
+  if (categoria === "legendaria") {
+    if (roll < 45) return `${randInt(40, 99)}`;
+    if (roll < 75) return `${randInt(100, 299)}`;
+    if (roll < 93) return `${randInt(300, 699)}`;
+    return `${randInt(700, MAX_EDAD_PERSONAJE)}`;
+  }
+
+  if (categoria === "prolongada") {
+    if (roll < 40) return `${randInt(25, 99)}`;
+    if (roll < 80) return `${randInt(100, 219)}`;
+    return `${randInt(220, 320)}`;
+  }
+
+  if (roll < 55) return `${randInt(18, 39)}`;
+  if (roll < 85) return `${randInt(40, 65)}`;
+  return `${randInt(66, 90)}`;
 }
 
 /* ──────────────────────── Estadísticas ──────────────────────── */
@@ -410,6 +444,135 @@ function generarExtras(): string {
   return seleccionados.map(e => `• ${e}`).join("\n");
 }
 
+function normalizarConcordanciaGenero(historia: string, genero: string): string {
+  if (genero !== "Femenino") return historia;
+
+  const reemplazos: Array<[RegExp, string]> = [
+    [/\blo obligó\b/g, "la obligó"],
+    [/\blo respaldara\b/g, "la respaldara"],
+    [/\blo tomó bajo su protección\b/g, "la tomó bajo su protección"],
+    [/\bjuzgarlo\b/g, "juzgarla"],
+    [/\blo rodeaban\b/g, "la rodeaban"],
+    [/\blo distinguían\b/g, "la distinguían"],
+  ];
+
+  return reemplazos.reduce((texto, [patron, valor]) => texto.replace(patron, valor), historia);
+}
+
+function construirParrafosExtra(
+  nombre: string,
+  raza: string,
+  reino: string,
+  lema: string,
+  profesion: string,
+  claseSocial: string,
+  arma: string,
+  edad: number,
+  longevidad: CategoriaLongevidad,
+): string[] {
+  const comunes = [
+    `${nombre} pasó por etapas muy distintas dentro de ${reino}: años de aprendizaje, temporadas de disciplina extrema y periodos donde tuvo que reconstruir su lugar entre gente que no estaba dispuesta a confiar de inmediato. En cada una de esas fases fue acumulando hábitos, cicatrices y una forma más sobria de entender el deber.`,
+    `A medida que su oficio como ${profesion} se consolidó, ${nombre} aprendió que la reputación no depende solo del talento, sino de la constancia con que uno sostiene sus decisiones cuando el entorno cambia. Esa certeza fue empujándolo a perfeccionar tanto su dominio de ${arma} como su criterio al elegir aliados, rutas y causas.`,
+    `La historia personal de ${nombre} también quedó marcada por pérdidas concretas: personas que no sobrevivieron a guerras menores, amistades quebradas por intereses opuestos y promesas que el tiempo volvió imposibles de cumplir. En lugar de romperse por completo, transformó esas ausencias en memoria activa y en una prudencia difícil de engañar.`,
+    `Hubo momentos en que ${nombre} tuvo que alejarse de espacios donde antes era bien recibido. Algunas rupturas nacieron del orgullo ajeno, otras de su negativa a aceptar órdenes vacías, pero todas dejaron una lección útil: el prestigio solo vale algo si no exige traicionarse para sostenerlo.`,
+    `El lema "${lema}" no funciona para ${nombre} como una frase ornamental. Es una regla interior que reaparece cuando debe elegir entre comodidad y responsabilidad, entre lealtad y conveniencia, o entre una victoria inmediata y una consecuencia más duradera para quienes lo rodean.`,
+    `${nombre} nunca vivió su pertenencia a la raza ${raza} como un simple rasgo de origen. Esa herencia moldeó expectativas, prejuicios, ventajas y cargas particulares, y obligó a que cada paso importante fuese leído por los demás a través de un filtro cultural que a veces ayudó y otras veces pesó demasiado.`,
+    `Con el tiempo, ${nombre} desarrolló una relación más compleja con la autoridad. Respeta la estructura cuando protege a la gente correcta, pero desconfía de las jerarquías que se sostienen solo por tradición o miedo. Esa tensión atraviesa tanto su manera de hablar como su forma de actuar cuando una crisis exige decisión rápida.`,
+    `El recorrido de ${nombre} también dejó huellas visibles en su comportamiento cotidiano. Observa antes de hablar, escucha incluso cuando desconfía y rara vez entrega su palabra sin medir las consecuencias. No es frialdad vacía, sino una disciplina nacida de haber visto cómo decisiones pequeñas pueden deformar destinos enteros.`,
+  ];
+
+  const prolongadas = [
+    `Cuando la edad de ${nombre} empezó a superar la de la mayoría de sus contemporáneos, la percepción del tiempo cambió con violencia. Las estaciones dejaron de sentirse como una simple sucesión de inviernos y veranos, y comenzaron a convertirse en capítulos enteros de aprendizaje. Cada década añadió nuevos maestros, nuevas culpas y nuevas preguntas sobre qué partes de su identidad merecían sobrevivir.`,
+    `${nombre} vio cambiar oficios, barrios, pactos y generaciones enteras dentro de un mismo territorio. Esa continuidad le dio una mirada más histórica que la de sus contemporáneos, porque entiende que muchos conflictos presentes son apenas ecos de errores viejos que nadie quiso recordar a tiempo.`,
+    `La longevidad de ${nombre} no llegó sola: también trajo cansancio, distancia y una conciencia más dura sobre lo efímero de casi todos los vínculos. Aprendió a querer sin ingenuidad, a despedirse sin teatralidad y a aceptar que la memoria a veces pesa tanto como una armadura completa.`,
+    `Hubo décadas en que ${nombre} prefirió el retiro antes que el protagonismo. En esos intervalos estudió, trabajó en silencio, corrigió errores propios y dejó que otros ocuparan el centro. Lejos de debilitarlo, ese repliegue refinó su criterio y lo convirtió en alguien mucho más difícil de manipular.`,
+    `La experiencia prolongada también transformó la forma en que ${nombre} entiende el fracaso. Lo que antes podía vivirse como derrota absoluta hoy es leído como un episodio más dentro de un trayecto mucho mayor, algo que le permite sostener la calma incluso cuando el presente parece inclinarse hacia la ruina.`,
+  ];
+
+  const legendarias = [
+    `${nombre} pertenece a un tipo de existencia que obliga a pensar en siglos y no solo en años. A lo largo de esa vida extensa ha visto desaparecer nombres que parecían eternos, alianzas que prometían estabilidad y centros de poder que terminaron cayendo por orgullo, codicia o simple desgaste.`,
+    `En una vida tan prolongada, incluso la identidad deja de ser una pieza inmóvil. ${nombre} tuvo que reinventar prioridades, revisar convicciones y aceptar que no todas las versiones de sí merecían llegar intactas al presente. Esa capacidad de transformación es parte central de su fortaleza y también de su carga más íntima.`,
+    `${nombre} recuerda épocas completas con una claridad que incomodaría a cualquiera dispuesto a romantizar el pasado. Sabe cuánto puede costar una guerra sostenida, cuántas verdades se tuercen con el tiempo y cuán fácil es que una causa justa termine secuestrada por manos indignas.`,
+    `Las relaciones de ${nombre} con el mundo actual están atravesadas por esa memoria larga. Cuando escucha promesas grandilocuentes o amenazas repetidas, no reacciona como alguien impresionable, sino como quien ya ha visto demasiadas veces el mismo ciclo vestido con símbolos nuevos.`,
+    `Pese a todo, ${nombre} no vive atrapado en la nostalgia. Sigue buscando motivos presentes para actuar, proteger, enseñar o intervenir, porque entiende que sobrevivir tanto solo tiene sentido si aún queda algo digno de ser legado a quienes vienen después.`,
+  ];
+
+  const seleccion = [...shuffle(comunes)];
+  if (longevidad !== "normal" || edad >= 100) seleccion.push(...shuffle(prolongadas));
+  if (longevidad === "legendaria" || edad >= 300) seleccion.push(...shuffle(legendarias));
+
+  if (claseSocial === "Noble") {
+    seleccion.push(
+      `${nombre} sigue siendo observado por la nobleza con una mezcla de respeto, cálculo y recelo. Su linaje abre puertas, pero también activa expectativas sofocantes, y eso lo obliga a justificar cada desviación del camino tradicional con resultados concretos en vez de meras palabras.`,
+    );
+  }
+
+  if (edad >= 700) {
+    seleccion.push(
+      `Haber vivido tanto volvió a ${nombre} más selectivo con la esperanza, pero no incapaz de sentirla. Cada proyecto que decide proteger en el presente debe merecer el peso de siglos de memoria, porque ya no concede su energía a causas pequeñas ni a juramentos que no soporten el paso del tiempo.`,
+    );
+  }
+
+  return seleccion;
+}
+
+function expandirHistoriaPorEdad(
+  historiaBase: string,
+  edadTexto: string,
+  raza: string,
+  reino: string,
+  lema: string,
+  profesion: string,
+  claseSocial: string,
+  arma: string,
+  genero: string,
+  nombre: string,
+): string {
+  const historiaNormalizada = normalizarConcordanciaGenero(historiaBase, genero);
+  const edad = edadNumerica(edadTexto) ?? 30;
+  const longevidad = obtenerCategoriaLongevidadPorRaza(raza);
+  const requisito = obtenerRequisitoHistoriaPorEdad(edad);
+  const parrafosBase = historiaNormalizada
+    .split(/\n\s*\n/)
+    .map((parrafo) => parrafo.trim())
+    .filter(Boolean);
+
+  const extras = construirParrafosExtra(
+    nombre,
+    raza,
+    reino,
+    lema,
+    profesion,
+    claseSocial,
+    arma,
+    edad,
+    longevidad,
+  );
+
+  while (parrafosBase.length < requisito.minParrafos && extras.length > 0) {
+    const siguiente = extras.shift();
+    if (siguiente) parrafosBase.push(siguiente);
+  }
+
+  const refuerzos = [
+    "Ese recuerdo sigue influyendo en el modo exacto en que decide a quién proteger, cuándo ceder y qué clase de precio está dispuesto a pagar por mantenerse fiel a sí mismo.",
+    "No se trata solo de pasado acumulado, sino de una experiencia que todavía se refleja en sus gestos, en sus silencios y en la clase de promesas que acepta pronunciar.",
+    "Cada una de esas vivencias dejó marcas visibles en su criterio, en su paciencia y en la dureza con la que juzga tanto sus propios errores como los ajenos.",
+    "Por eso su historia no puede resumirse en un solo conflicto: es la suma de varias etapas que fueron alterando su manera de pensar, de combatir y de relacionarse con el poder.",
+  ];
+
+  let historia = parrafosBase.join("\n\n");
+  let indice = 0;
+  while (contarPalabras(historia) < requisito.minPalabras) {
+    const posicion = indice % parrafosBase.length;
+    parrafosBase[posicion] = `${parrafosBase[posicion]} ${refuerzos[indice % refuerzos.length]}`;
+    historia = parrafosBase.join("\n\n");
+    indice += 1;
+  }
+
+  return historia;
+}
+
 /* ══════════════════════════════════════════════════════════════
    FUNCIÓN PRINCIPAL
    ══════════════════════════════════════════════════════════════ */
@@ -458,8 +621,20 @@ export function generarFichaAleatoria(): Ficha {
   const personalidad = rand(PERSONALIDADES);
 
   // 13. Historia elaborada
-  const historia = generarHistoria(
+  const historiaBase = generarHistoria(
     primerNombre, raza, reino, reinoObj.lema, profesion, claseSocial, arma, genero,
+  );
+  const historia = expandirHistoriaPorEdad(
+    historiaBase,
+    edad,
+    raza,
+    reino,
+    reinoObj.lema,
+    profesion,
+    claseSocial,
+    arma,
+    genero,
+    primerNombre,
   );
 
   // 14. Debilidades variadas

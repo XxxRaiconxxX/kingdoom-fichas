@@ -1,4 +1,9 @@
-import type { Ficha } from "../schema/fichaSchema";
+import {
+  type Ficha,
+  edadNumerica,
+  obtenerCategoriaLongevidadPorRaza,
+  obtenerRequisitoHistoriaPorEdad,
+} from "../schema/fichaSchema";
 
 export interface SugerenciaIA {
   apartado: string;
@@ -22,10 +27,22 @@ export async function analizarFichaConIA(
   ficha: Ficha,
   avisosLocales: string[],
 ): Promise<AnalisisIA> {
+  const edad = edadNumerica(ficha.edad);
+  const requisitoHistoria = obtenerRequisitoHistoriaPorEdad(edad);
+
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ficha, avisosLocales }),
+    body: JSON.stringify({
+      ficha,
+      avisosLocales,
+      contextoNarrativo: {
+        edadNumerica: edad,
+        longevidadRaza: obtenerCategoriaLongevidadPorRaza(ficha.raza),
+        requisitoHistoria,
+        revisarPronombresSegunGenero: true,
+      },
+    }),
   });
 
   if (!res.ok) {
