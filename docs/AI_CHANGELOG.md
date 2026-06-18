@@ -1,5 +1,16 @@
 # AI_CHANGELOG
 
+## 2026-06-18 - [Antigravity] Empaquetado V4 del APK
+
+- Se alineó el versionado del proyecto a `4.0.0` en `package.json`.
+- Se actualizó Android a `versionCode 4` y `versionName 4.0`.
+- Se compiló la APK V4 de depuración (`apk:debug`) incluyendo la reescritura completa del generador de fichas aleatorias.
+
+### Validación
+
+- `npm run sync`
+- `npm run apk:debug` con `JAVA_HOME=C:\Program Files\Android\Android Studio\jbr`
+
 ## 2026-06-18 - [Antigravity] Reescritura completa del generador aleatorio de fichas
 
 - Se reescribió `src/utils/generarFichaAleatoria.ts` de cero, reemplazando todos los campos hardcodeados por pools extensos y lógica de coherencia.
