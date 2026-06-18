@@ -1,5 +1,17 @@
 # Kingdoom Fichas - Handoff para agentes
 
+## Update 2026-06-18 - [Codex]
+
+- Se corrigio el flujo de `Copiar texto final` en la linea V5 para Android.
+- El copiado ahora valida que el texto completo quede realmente en el portapapeles antes de reportar exito.
+- Orden de fallback actual:
+  - `@capacitor/clipboard` + lectura inmediata
+  - `navigator.clipboard`
+  - `textarea + execCommand("copy")`
+- Artefactos locales generados tras el fix:
+  - `C:\Users\e_grado\Documents\New project 2\kingdoom-fichas-release\Kingdoom-Fichas-v5.0.0-clipboard-fix-debug.apk`
+  - `C:\Users\e_grado\Documents\New project 2\kingdoom-fichas-release\Kingdoom-Fichas-v5.0.0-clipboard-fix-release-unsigned.apk`
+
 App/APK **asistente para crear y validar fichas de rol** del grupo de WhatsApp de Kingdoom. El usuario rellena o genera una ficha, la app la valida, sugiere mejoras y, cuando pasa el check, permite **copiar o compartir** el texto con el formato exacto esperado por el ecosistema del reino.
 
 - **Ubicación:** `C:\Users\e_grado\Documents\New project 2\kingdoom-fichas`

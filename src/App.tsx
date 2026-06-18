@@ -43,6 +43,103 @@ const GLYPH_COPY = String.fromCodePoint(0x274f);
 const GLYPH_SEND = String.fromCodePoint(0x27a4);
 const GLYPH_CHEVRON = String.fromCodePoint(0x25b8);
 
+function normalizarClipboard(texto: string) {
+  return texto.replace(/\r\n/g, "\n");
+}
+
+function clipboardCoincide(esperado: string, recibido: string) {
+  return normalizarClipboard(recibido) === normalizarClipboard(esperado);
+}
+
+async function copiarConTextarea(texto: string) {
+  const area = document.createElement("textarea");
+  area.value = texto;
+  area.setAttribute("readonly", "true");
+  area.setAttribute("aria-hidden", "true");
+  area.style.position = "fixed";
+  area.style.top = "0";
+  area.style.left = "-9999px";
+  area.style.opacity = "0";
+  document.body.appendChild(area);
+
+  const seleccion = document.getSelection();
+  const rangoPrevio =
+    seleccion && seleccion.rangeCount > 0 ? seleccion.getRangeAt(0) : null;
+
+  area.focus();
+  area.select();
+  area.setSelectionRange(0, area.value.length);
+
+  const exito = document.execCommand("copy");
+  document.body.removeChild(area);
+
+  if (seleccion) {
+    seleccion.removeAllRanges();
+    if (rangoPrevio) {
+      seleccion.addRange(rangoPrevio);
+    }
+  }
+
+  if (!exito) {
+    throw new Error("execCommand(copy) no pudo copiar el texto.");
+  }
+}
+
+async function copiarTextoCompleto(texto: string) {
+  const errores: string[] = [];
+
+  try {
+    await Clipboard.write({
+      string: texto,
+      label: "Kingdoom ficha completa",
+    });
+    const { value } = await Clipboard.read();
+    if (clipboardCoincide(texto, value)) {
+      return;
+    }
+    errores.push(
+      `Capacitor Clipboard devolvio ${value.length}/${texto.length} caracteres.`,
+    );
+  } catch (error) {
+    errores.push(
+      `Capacitor Clipboard fallo: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
+  try {
+    if (!navigator.clipboard?.writeText) {
+      throw new Error("navigator.clipboard no esta disponible.");
+    }
+    await navigator.clipboard.writeText(texto);
+    if (navigator.clipboard.readText) {
+      const lecturaWeb = await navigator.clipboard.readText();
+      if (clipboardCoincide(texto, lecturaWeb)) {
+        return;
+      }
+      errores.push(
+        `Web Clipboard devolvio ${lecturaWeb.length}/${texto.length} caracteres.`,
+      );
+    } else {
+      return;
+    }
+  } catch (error) {
+    errores.push(
+      `Web Clipboard fallo: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
+  try {
+    await copiarConTextarea(texto);
+    return;
+  } catch (error) {
+    errores.push(
+      `Textarea fallback fallo: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
+  throw new Error(errores.join(" | "));
+}
+
 export default function App() {
   const [ficha, setFicha] = useState<Ficha>(fichaVacia());
   const [aviso, setAviso] = useState("");
@@ -102,13 +199,17 @@ export default function App() {
 
   async function copiar() {
     try {
-      await Clipboard.write({ string: texto });
-    } catch {
-      await navigator.clipboard?.writeText(texto);
+      await copiarTextoCompleto(texto);
+      setAviso("Ficha copiada completa al portapapeles.");
+    } catch (error) {
+      setAviso(
+        error instanceof Error
+          ? `No se pudo copiar la ficha completa. ${error.message}`
+          : "No se pudo copiar la ficha completa.",
+      );
+    } finally {
+      setTimeout(() => setAviso(""), 4000);
     }
-
-    setAviso("Ficha copiada al portapapeles.");
-    setTimeout(() => setAviso(""), 2500);
   }
 
   async function compartir() {

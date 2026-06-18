@@ -1,5 +1,24 @@
 # AI_CHANGELOG
 
+## 2026-06-18 - [Codex] Blindaje del copiado completo en Android para la APK V5
+
+- Se corrigio el flujo de `Copiar texto final` en `src/App.tsx` para evitar falsos positivos cuando Android/Capacitor deja el portapapeles truncado.
+- El boton ahora usa una cadena de copiado con verificacion real:
+  - `@capacitor/clipboard` con lectura inmediata de retorno
+  - `navigator.clipboard` como segundo intento si esta disponible
+  - fallback final por `textarea + execCommand("copy")`
+- Si algun metodo devuelve menos caracteres que el texto original, la app ya no reporta exito silencioso y continua probando el siguiente camino.
+- El aviso visual al usuario se actualizo para distinguir entre copia completa confirmada y fallo de copia.
+
+### Validacion
+
+- `npx tsc --noEmit`
+- `npm run build`
+
+### Riesgos abiertos
+
+- El flujo queda mucho mas robusto, pero la validacion completa en dispositivo real sigue siendo importante porque algunos teclados o capas OEM de Android pueden tratar distinto el portapapeles del sistema.
+
 ## 2026-06-18 - [Codex] Registro de release V5 para GitHub
 
 - Se alineó el proyecto a la línea de distribución **V5**:
