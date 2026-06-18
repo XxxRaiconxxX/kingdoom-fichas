@@ -1,5 +1,30 @@
 # AI_CHANGELOG
 
+## 2026-06-18 - [Antigravity] Reescritura completa del generador aleatorio de fichas
+
+- Se reescribió `src/utils/generarFichaAleatoria.ts` de cero, reemplazando todos los campos hardcodeados por pools extensos y lógica de coherencia.
+- **Nombres:** Pool de ~50 nombres masculinos y ~48 femeninos de estilo medieval/fantasía + ~50 apellidos + apodos opcionales. El nombre se genera según el género elegido.
+- **Género:** Solo "Masculino" o "Femenino" (se eliminó "No binario").
+- **Edad:** Se genera coherentemente según la raza. Razas longevas extremas (Elfos, Vampiros, Liches, Dragones) → 200-1200 años. Razas longevas (Semi-Elfos, Nephilim, Demonios) → 60-500. Mortales → 18-65.
+- **Poderes Oficiales:** Se eliminó el array hardcodeado de 7 magias inventadas. Ahora se importa `getCatalogoGrimorio()` y se seleccionan magias reales del grimorio (31 estilos), respetando los niveles máximos de cada estilo.
+- **Arma + Estilo de combate:** Coherencia mutua. Se categorizan armas (cuerpo, distancia, mágico-físico) y se emparejan con estilos extensos (párrafos de 3-5 oraciones).
+- **Clase social ↔ Título ↔ Profesión:** Coherencia total. Noble → título aleatorio (Barón, Conde, Duque, etc.) + profesiones de alto rango. Burgués → sin título + profesiones comerciales. Plebeyo → sin título + profesiones humildes.
+- **Habilidades no mágicas:** Pool de 20 habilidades detalladas (nombre + descripción). Se seleccionan 3-5 aleatorias.
+- **Personalidad:** Pool de 8 personalidades profundas y variadas (60-100 palabras cada una).
+- **Historia:** 5 plantillas narrativas extensas (200+ palabras) con variables dinámicas ({nombre}, {raza}, {reino}, {lema}, {profesión}, {arma}, {clase social}, {género}).
+- **Debilidades:** Pool de 10 debilidades variadas (físicas, emocionales, tácticas). Se seleccionan 2-3.
+- **Inventario:** Base común + extras aleatorios coherentes. Incluye el arma principal.
+- **Extras:** Pool de 10 curiosidades/manías del personaje. Se seleccionan 2-4.
+
+### Validación
+
+- `tsc --noEmit` ✅
+- `npm run build` (tsc -b && vite build) ✅ — 44 módulos, 4.05s
+
+### Riesgos abiertos
+
+- El grimorio local (`grimorio.json`) tiene 31 magias. Si existen más en Supabase, el generador las usará automáticamente tras el sync, pero el bundle offline seguiría limitado a 31.
+
 ## 2026-06-17 - [Codex] Empaquetado V3 del APK
 
 - Se alineo el versionado del proyecto a `3.0.0` en `package.json`.
