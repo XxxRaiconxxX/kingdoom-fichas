@@ -4,12 +4,12 @@
 
 - Se alineó el versionado del proyecto a `4.0.0` en `package.json`.
 - Se actualizó Android a `versionCode 4` y `versionName 4.0`.
-- Se compiló la APK V4 de depuración (`apk:debug`) incluyendo la reescritura completa del generador de fichas aleatorias.
+- Se creó el flujo de trabajo de GitHub Actions `.github/workflows/build-apk.yml` para compilar la APK de depuración en la nube de forma automática ante cada push o de manera manual, resolviendo las limitaciones de herramientas locales (JDK/SDK).
 
 ### Validación
 
-- `npm run sync`
-- `npm run apk:debug` con `JAVA_HOME=C:\Program Files\Android\Android Studio\jbr`
+- Sincronización y compilación del frontend exitosas (`npm run build && npx cap sync android`).
+- Estructuración del archivo de flujo de trabajo YAML para GitHub Actions.
 
 ## 2026-06-18 - [Antigravity] Reescritura completa del generador aleatorio de fichas
 
