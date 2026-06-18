@@ -4,7 +4,7 @@ App/APK **asistente para crear y validar fichas de rol** del grupo de WhatsApp d
 
 - **Ubicación:** `C:\Users\e_grado\Documents\New project 2\kingdoom-fichas`
 - **Proyectos hermanos:** `Kingdoom-sync` (web SPA + API Vercel), `kingdoom-bot` (bot WhatsApp). Misma cuenta Supabase.
-- **Fecha de este handoff:** 2026-06-17
+- **Fecha de este handoff:** 2026-06-18
 
 ---
 
@@ -75,8 +75,15 @@ npm run dev
 npm run build
 ```
 
-### Android / APK
+### Android / APK (Compilación en la Nube y Local)
 
+**Compilación en la Nube (Recomendado):**
+- Se configuró un flujo de automatización en `.github/workflows/build-apk.yml` de GitHub Actions.
+- Se ejecuta automáticamente con cada `push` en `main` o manualmente mediante `workflow_dispatch`.
+- Requiere **Node 22** y **Java 21** (configurados automáticamente en la VM de GitHub `ubuntu-latest`).
+- La APK compilada queda disponible como un artefacto descargable (`Kingdoom-Fichas-v4.0-APK`) en GitHub.
+
+**Compilación Local:**
 ```bash
 npm run sync
 npm run apk:debug
@@ -84,9 +91,8 @@ npm run apk:release
 ```
 
 Notas:
-
 - `npm run sync` hace build web + `cap sync android`
-- Para build Android CLI hace falta `JAVA_HOME` con JDK 17+ o la `jbr` de Android Studio
+- Para compilar localmente se requiere **Node >=22.0.0** (exigido por Capacitor 8) y **Java JDK 21** (para evitar errores de `invalid source release: 21` de Gradle).
 - Si Gradle no encuentra el SDK, usar `android/local.properties` con `sdk.dir=...`
 
 ---
@@ -160,12 +166,10 @@ Estado verificado:
 
 ## Estado actual
 
-- UI premium ya integrada
-- Reorganización de carpetas completada
-- Build web validada
-- Sync Android validado
-- APK debug y release ya generados por CLI
-- APK release firmado y artefactos de distribución preparados fuera del repo
+- **Reescritura del generador de fichas (`generarFichaAleatoria.ts`):** Completamente rediseñado con pools realistas y coherentes de nombres, apellidos, apodos, edades por raza (según longevidad), profesiones según clase social, estilos de combate tácticos extensos, habilidades y debilidades profundas, y 5 plantillas narrativas de historia con variables dinámicas.
+- **Compilación en la Nube (GitHub Actions):** Automatización del empaquetado del APK de depuración con Node 22 y Java 21 ante pushes o ejecuciones manuales.
+- **Versión del proyecto alineada a V4.0.0** (`versionCode 4` / `versionName 4.0` en Gradle y `package.json`).
+- UI premium y responsive integrada en móvil y escritorio.
 
 ---
 
