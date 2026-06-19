@@ -2,6 +2,23 @@
 
 Las entradas más recientes van arriba.
 
+## [5.0.1] - 2026-06-19
+
+Parche post V5 para reducir egress de Supabase y mejorar la lectura en pantallas moviles.
+
+### Cambiado
+
+- El sync automatico del grimorio ahora respeta una ventana local de 24 horas y deja de descargar el JSON pesado de niveles en cada apertura.
+- El boton manual de sincronizacion conserva el refresh forzado cuando el staff quiera actualizar el catalogo.
+- En mobile, las secciones principales del formulario se vuelven colapsables para disminuir saturacion visual y scroll vertical.
+- El lint ignora artefactos generados por Android/Gradle para validar solamente el codigo fuente real.
+- Versionado alineado a `5.0.1` en npm y Android (`versionCode 6`) para distribuirlo como actualizacion sobre V5.
+
+### Notas de build
+
+- `npm run lint` validado.
+- `npm run build` validado.
+
 ## [5.0.0] — 2026-06-18
 
 Distribución V5. Endurecimiento narrativo por edad + preparación del release en GitHub.
@@ -61,3 +78,4 @@ Distribución V2 (APK de grupo). Pasada de calidad visual + cierre de funciones.
 
 - Base funcional: formulario de ficha, validador local, generador aleatorio y salida lista para WhatsApp.
 - Proyecto Vite + React + TypeScript + Capacitor (Android).
+

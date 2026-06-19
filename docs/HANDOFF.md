@@ -1,5 +1,17 @@
 # Kingdoom Fichas - Handoff para agentes
 
+## Update 2026-06-19 - [Codex]
+
+- Se tomo el relevo del trabajo iniciado por Claude sobre saturacion mobile y egress de Supabase.
+- `src/services/grimorio.ts` ahora evita descargar la columna pesada `levels` y respeta un TTL local de 24 horas para el sync automatico.
+- El boton `Sincronizar grimorio` sigue disponible como accion manual y fuerza el refresh remoto.
+- `src/components/SectionCard.tsx` ahora soporta modo colapsable; en mobile, solo la primera seccion del formulario queda abierta por defecto.
+- Se agrego `src/hooks/useIsMobile.ts` y estilos colapsables en `src/styles/App.css`.
+- `eslint.config.js` ignora artefactos generados de Android/Gradle para que `npm run lint` valide solo codigo fuente real.
+- Versionado actual: `package.json` 5.0.1 y Android `versionCode 6` / `versionName 5.0.1`.
+- Validacion ejecutada: `npm run lint` y `npm run build`, ambos exitosos.
+- Riesgo abierto: el egress ya excedido en Supabase no baja retroactivamente; esta mitigacion apunta a reducir consumo nuevo.
+
 ## Update 2026-06-18 - [Codex]
 
 - Se corrigio el flujo de `Copiar texto final` en la linea V5 para Android.

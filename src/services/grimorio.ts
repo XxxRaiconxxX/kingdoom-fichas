@@ -10,6 +10,12 @@ export interface EstiloMagia {
 }
 
 const CACHE_KEY = "grimorio.cache.v2";
+const SYNC_AT_KEY = "grimorio.synced.at";
+// Solo se vuelve a sincronizar como mucho una vez al día (reduce egress de Supabase).
+const SYNC_TTL_MS = 24 * 60 * 60 * 1000;
+// Niveles por defecto de un estilo (todos los del catálogo usan 1..5). Evita
+// descargar la columna `levels` (jsonb pesado con todo el texto de los hechizos).
+const NIVELES_DEFECTO = [1, 2, 3, 4, 5];
 
 // Datos de Supabase (anon/publishable key, pensada para uso público).
 const SUPABASE_URL = "https://sibisgiwmgdrpfkzmkkw.supabase.co";
@@ -56,11 +62,29 @@ export function buscarEstilo(nombre: string): EstiloMagia | null {
   );
 }
 
+function syncReciente(): boolean {
+  try {
+    const at = Number(localStorage.getItem(SYNC_AT_KEY) || 0);
+    return at > 0 && Date.now() - at < SYNC_TTL_MS;
+  } catch {
+    return false;
+  }
+}
+
 // Refresca el catálogo desde Supabase y lo guarda en cache. Devuelve nº de estilos.
-export async function sincronizarGrimorio(): Promise<number> {
+// Por defecto respeta un TTL (1 vez/día) para no consumir egress en cada apertura.
+// `forzar: true` (botón manual de sync) ignora el TTL.
+export async function sincronizarGrimorio(
+  opciones: { forzar?: boolean } = {},
+): Promise<number> {
+  if (!opciones.forzar && syncReciente()) {
+    return catalogo.length;
+  }
+
+  // Pedimos solo lo necesario (sin la columna `levels`, que es pesada).
   const url =
     `${SUPABASE_URL}/rest/v1/grimoire_magic_styles` +
-    `?select=id,title,category_title,levels&order=sort_order`;
+    `?select=id,title,category_title&order=sort_order`;
   const res = await fetch(url, {
     headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` },
   });
@@ -69,16 +93,12 @@ export async function sincronizarGrimorio(): Promise<number> {
     id: string;
     title: string;
     category_title: string;
-    levels: Record<string, unknown>;
   }>;
   const remotos: EstiloMagia[] = filas.map((f) => ({
     id: f.id,
     title: f.title,
     categoria: f.category_title,
-    niveles: Object.keys(f.levels ?? {})
-      .map((k) => parseInt(k, 10))
-      .filter((x) => !Number.isNaN(x))
-      .sort((a, b) => a - b),
+    niveles: NIVELES_DEFECTO,
   }));
   // Fusiona sobre el bundle (Supabase tiene prioridad). El sync nunca encoge el catálogo.
   const fusionado = fusionarConBundle(remotos);
@@ -86,6 +106,7 @@ export async function sincronizarGrimorio(): Promise<number> {
     catalogo = fusionado;
     try {
       localStorage.setItem(CACHE_KEY, JSON.stringify(fusionado));
+      localStorage.setItem(SYNC_AT_KEY, String(Date.now()));
     } catch {
       /* ignorar fallos de almacenamiento */
     }

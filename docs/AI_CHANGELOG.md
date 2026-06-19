@@ -1,5 +1,31 @@
 # AI_CHANGELOG
 
+## 2026-06-19 - [Codex] Reduccion de egress Supabase y compactacion mobile post V5
+
+- Se redujo el consumo de egress del sync del grimorio en `src/services/grimorio.ts`:
+  - el arranque automatico ya respeta un TTL local de 24 horas
+  - el boton manual de sincronizacion usa `forzar: true`
+  - la consulta remota dejo de descargar `levels` para evitar traer el JSONB pesado completo en cada apertura
+  - los niveles disponibles se resuelven como `[1, 2, 3, 4, 5]`, consistente con el catalogo actual usado por la app
+- Se agrego `src/hooks/useIsMobile.ts` para activar comportamiento especifico en pantallas pequenas.
+- Se extendio `src/components/SectionCard.tsx` para soportar secciones colapsables sin afectar escritorio.
+- En `src/App.tsx`, las secciones principales del formulario ahora se pliegan en mobile:
+  - Identidad queda abierta por defecto
+  - Combate, rango y narrativa quedan compactadas hasta que el usuario las despliegue
+- Se agregaron estilos en `src/styles/App.css` para el modo colapsable, reduciendo scroll vertical y saturacion visual.
+- Se ajusto `eslint.config.js` para ignorar artefactos generados por Android/Gradle durante `npm run lint`.
+- Se alineo el versionado del paquete a `5.0.1` y Android a `versionCode 6` / `versionName 5.0.1`.
+
+### Validacion
+
+- `npm run lint`
+- `npm run build`
+
+### Riesgos abiertos
+
+- Esta optimizacion reduce llamadas y payload del grimorio, pero el egress ya consumido en Supabase no se recupera hasta el siguiente ciclo de facturacion.
+- Si en el futuro algun estilo del grimorio remoto no usa niveles 1..5, convendra agregar una columna liviana de metadatos de niveles para evitar volver a descargar `levels`.
+
 ## 2026-06-18 - [Codex] Blindaje del copiado completo en Android para la APK V5
 
 - Se corrigio el flujo de `Copiar texto final` en `src/App.tsx` para evitar falsos positivos cuando Android/Capacitor deja el portapapeles truncado.

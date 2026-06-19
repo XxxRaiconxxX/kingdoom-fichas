@@ -1174,6 +1174,65 @@ select:focus-visible {
   line-height: 1.7;
 }
 
+/* ============ SECCIONES COLAPSABLES (móvil) ============ */
+.section-card__toggle {
+  /* reset del estilo global de <button> */
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.section-card__toggle:hover:not(:disabled),
+.section-card__toggle:active:not(:disabled) {
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+
+.section-card--collapsible .section-card__head {
+  margin-bottom: 0;
+}
+
+.section-card--collapsible .section-card__body {
+  margin-top: 16px;
+  animation: kf-rise 260ms ease both;
+}
+
+.section-card__chevron {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--kf-gold-soft);
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 200ms ease;
+}
+
+.section-card.is-collapsed .section-card__chevron {
+  transform: rotate(-90deg);
+}
+
+.section-card.is-collapsed {
+  /* más compacta al estar plegada */
+  padding-block: 14px;
+}
+
+.section-card.is-collapsed::before {
+  opacity: 0.4;
+}
+
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1120px) {
   .workspace,

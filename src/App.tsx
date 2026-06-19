@@ -6,6 +6,7 @@ import heroImage from "./assets/hero.png";
 import { Campo } from "./components/Campo";
 import { MetricCard } from "./components/MetricCard";
 import { SectionCard } from "./components/SectionCard";
+import { useIsMobile } from "./hooks/useIsMobile";
 import { CLASES_SOCIALES, exigeTitulo } from "./data/clasesSociales";
 import { RAZAS_POR_CATEGORIA } from "./data/razas";
 import { REINOS } from "./data/reinos";
@@ -148,6 +149,8 @@ export default function App() {
   const [analisis, setAnalisis] = useState<AnalisisIA | null>(null);
   const [errorIA, setErrorIA] = useState("");
 
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     sincronizarGrimorio().catch(() => {});
   }, []);
@@ -184,7 +187,7 @@ export default function App() {
   async function sincronizar() {
     setSincronizando(true);
     try {
-      const total = await sincronizarGrimorio();
+      const total = await sincronizarGrimorio({ forzar: true });
       setAviso(`Grimorio actualizado: ${total} estilos de magia disponibles.`);
       setFicha((anterior) => ({ ...anterior }));
     } catch {
@@ -351,6 +354,8 @@ export default function App() {
             eyebrow="Identidad"
             title="Núcleo del personaje"
             description="Define la presencia base del personaje antes de entrar en combate, política o magia."
+            collapsible={isMobile}
+            defaultOpen
           >
             <div className="field-grid field-grid--two">
               <Campo
@@ -443,6 +448,8 @@ export default function App() {
 
           <SectionCard
             eyebrow="Combate y grimorio"
+            collapsible={isMobile}
+            defaultOpen={false}
             title="Balance del poder"
             description="Este bloque controla estadísticas, magia oficial y capacidades de combate del personaje."
           >
@@ -540,6 +547,8 @@ export default function App() {
 
           <SectionCard
             eyebrow="Rango, clase y presencia"
+            collapsible={isMobile}
+            defaultOpen={false}
             title="Posición social del personaje"
             description="Ajusta el estatus del personaje para que su trasfondo, acceso y trato en el mundo se sientan creíbles."
           >
@@ -592,6 +601,8 @@ export default function App() {
 
           <SectionCard
             eyebrow="Narrativa final"
+            collapsible={isMobile}
+            defaultOpen={false}
             title="Historia, presencia e inventario"
             description="La IA y la validación del reino dependen mucho de este bloque para medir la coherencia real."
           >
