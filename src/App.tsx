@@ -6,6 +6,7 @@ import heroImage from "./assets/hero.png";
 import { Campo } from "./components/Campo";
 import { MetricCard } from "./components/MetricCard";
 import { SectionCard } from "./components/SectionCard";
+import { TutorialOverlay } from "./components/TutorialOverlay";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { CLASES_SOCIALES, exigeTitulo } from "./data/clasesSociales";
 import { RAZAS_POR_CATEGORIA } from "./data/razas";
@@ -43,6 +44,7 @@ const GLYPH_EMPTY = String.fromCodePoint(0x2736);
 const GLYPH_COPY = String.fromCodePoint(0x274f);
 const GLYPH_SEND = String.fromCodePoint(0x27a4);
 const GLYPH_CHEVRON = String.fromCodePoint(0x25b8);
+const TUTORIAL_STORAGE_KEY = "kingdoom_fichas_tutorial_seen_v1";
 
 function normalizarClipboard(texto: string) {
   return texto.replace(/\r\n/g, "\n");
@@ -148,12 +150,36 @@ export default function App() {
   const [analizando, setAnalizando] = useState(false);
   const [analisis, setAnalisis] = useState<AnalisisIA | null>(null);
   const [errorIA, setErrorIA] = useState("");
+  const [tutorialOpen, setTutorialOpen] = useState(() => {
+    try {
+      return !localStorage.getItem(TUTORIAL_STORAGE_KEY);
+    } catch {
+      return true;
+    }
+  });
+  const [tutorialSession, setTutorialSession] = useState(0);
 
   const isMobile = useIsMobile();
 
   useEffect(() => {
     sincronizarGrimorio().catch(() => {});
   }, []);
+
+  function closeTutorial() {
+    try {
+      localStorage.setItem(TUTORIAL_STORAGE_KEY, "true");
+    } catch {
+      // Si localStorage no esta disponible, cerramos igual.
+    }
+
+    setTutorialOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function openTutorial() {
+    setTutorialSession((previous) => previous + 1);
+    setTutorialOpen(true);
+  }
 
   const setCampo = (campo: keyof Ficha, valor: string) =>
     setFicha((anterior) => ({ ...anterior, [campo]: valor }));
@@ -259,6 +285,11 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      <TutorialOverlay
+        key={tutorialSession}
+        open={tutorialOpen}
+        onFinish={closeTutorial}
+      />
       <div className="ambient-glow ambient-glow--left" aria-hidden="true" />
       <div className="ambient-glow ambient-glow--right" aria-hidden="true" />
 
@@ -284,10 +315,19 @@ export default function App() {
             <span>Análisis con IA</span>
             <span>Salida exacta para el bot</span>
           </div>
+          <div className="hero-card__actions">
+            <button
+              type="button"
+              className="button-secondary hero-card__tutorial-button"
+              onClick={openTutorial}
+            >
+              Ver tutorial
+            </button>
+          </div>
         </div>
 
         <div className="hero-card__visual">
-          <img src={heroImage} alt="Heroe del reino" />
+          <img src={heroImage} alt="Héroe del reino" />
           <div className={`hero-card__seal ${validacion.aprobada ? "is-ok" : "is-pending"}`}>
             <span className="hero-card__seal-title">Estado del reino</span>
             <strong>{validacion.aprobada ? "Ficha apta" : "Revisión en curso"}</strong>
@@ -322,18 +362,18 @@ export default function App() {
         </div>
       ) : null}
 
-      <section className="mobile-guidance-strip" aria-label="Resumen movil de la ficha">
+      <section className="mobile-guidance-strip" aria-label="Resumen móvil de la ficha">
         <article className="mobile-guidance-card">
           <span>Reino</span>
           <strong>{reinoSeleccionado?.nombre ?? "Sin reino"}</strong>
           <p>
             {reinoSeleccionado
-              ? "Se usara para cruzar raza, historia y tono."
+              ? "Se usará para cruzar raza, historia y tono."
               : "Elige un reino para activar lectura de contexto."}
           </p>
         </article>
         <article className="mobile-guidance-card">
-          <span>Validacion</span>
+          <span>Validación</span>
           <strong>{validacion.aprobada ? "Lista" : `${validacion.errores} errores`}</strong>
           <p>
             {validacion.aprobada
@@ -343,7 +383,7 @@ export default function App() {
         </article>
         <article className="mobile-guidance-card">
           <span>IA</span>
-          <strong>Correccion tematica</strong>
+          <strong>Corrección temática</strong>
           <p>El archivista revisa coherencia con el lore del grupo.</p>
         </article>
       </section>
@@ -646,7 +686,7 @@ export default function App() {
               </span>
               {validacion.aprobada
                 ? "Ficha lista para el reino"
-                : `${validacion.errores} errores ? ${validacion.avisos} avisos activos`}
+                : `${validacion.errores} errores · ${validacion.avisos} avisos activos`}
             </div>
 
             <div className="sidebar-metrics">

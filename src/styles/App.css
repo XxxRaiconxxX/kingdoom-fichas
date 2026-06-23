@@ -173,6 +173,17 @@
   margin-top: 22px;
 }
 
+.hero-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.hero-card__tutorial-button {
+  min-width: 170px;
+}
+
 .hero-card__chips span {
   display: inline-flex;
   align-items: center;
@@ -1233,6 +1244,355 @@ select:focus-visible {
   opacity: 0.4;
 }
 
+/* ============ TUTORIAL OVERLAY ============ */
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding:
+    calc(18px + var(--kf-safe-top))
+    calc(18px + var(--kf-safe-right))
+    calc(18px + var(--kf-safe-bottom))
+    calc(18px + var(--kf-safe-left));
+}
+
+.tutorial-overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top, rgba(214, 171, 84, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(6, 6, 10, 0.88), rgba(6, 6, 12, 0.94));
+  backdrop-filter: blur(14px);
+}
+
+.tutorial-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 18px;
+  width: min(1040px, 100%);
+  max-height: min(92vh, 880px);
+  padding: 24px;
+  overflow: auto;
+  border: 1px solid rgba(214, 171, 84, 0.24);
+  border-radius: 30px;
+  background:
+    linear-gradient(160deg, rgba(34, 26, 18, 0.98), rgba(14, 12, 21, 0.99)),
+    linear-gradient(180deg, rgba(239, 185, 74, 0.04), rgba(99, 68, 201, 0.05));
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.tutorial-card::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 29px;
+  border: 1px solid rgba(255, 255, 255, 0.035);
+  pointer-events: none;
+}
+
+.tutorial-card__topbar,
+.tutorial-card__actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tutorial-card__progress {
+  color: var(--kf-gold-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.tutorial-card__skip {
+  min-height: 42px;
+  padding-inline: 16px;
+}
+
+.tutorial-progress {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tutorial-progress__dot {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.tutorial-progress__dot.is-active {
+  background: linear-gradient(90deg, rgba(255, 212, 121, 0.95), rgba(141, 108, 255, 0.9));
+  box-shadow: 0 0 16px rgba(214, 171, 84, 0.28);
+}
+
+.tutorial-card__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.tutorial-copy {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 6px 0;
+}
+
+.tutorial-copy h2 {
+  margin: 0;
+  font-family: var(--kf-font-display);
+  font-size: clamp(1.7rem, 3vw, 2.7rem);
+  line-height: 1.08;
+  color: var(--kf-text-strong);
+  text-wrap: balance;
+}
+
+.tutorial-copy__body {
+  margin: 0;
+  color: var(--kf-text-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.tutorial-copy__list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tutorial-copy__list li {
+  position: relative;
+  padding: 13px 16px 13px 42px;
+  border-radius: 16px;
+  border: 1px solid rgba(214, 171, 84, 0.16);
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--kf-text-strong);
+  line-height: 1.6;
+}
+
+.tutorial-copy__list li::before {
+  content: "✦";
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  color: var(--kf-gold-soft);
+  font-size: 0.95rem;
+}
+
+.tutorial-scene {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.tutorial-scene__frame {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  padding: 22px;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(214, 171, 84, 0.18);
+  background:
+    linear-gradient(180deg, rgba(13, 11, 18, 0.96), rgba(18, 14, 26, 0.98)),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.03), transparent 55%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 24px 54px rgba(0, 0, 0, 0.34);
+}
+
+.tutorial-scene__halo,
+.tutorial-scene__sigil,
+.tutorial-scene__runes,
+.tutorial-scene__beam,
+.tutorial-scene__card {
+  position: absolute;
+}
+
+.tutorial-scene__halo {
+  inset: 14% 18% auto;
+  height: 42%;
+  border-radius: 999px;
+  filter: blur(42px);
+  opacity: 0.7;
+}
+
+.tutorial-scene__card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.25);
+}
+
+.tutorial-scene__card--main {
+  top: 18%;
+  left: 12%;
+  width: 48%;
+  height: 44%;
+  border-radius: 24px;
+}
+
+.tutorial-scene__card--side {
+  right: 10%;
+  bottom: 22%;
+  width: 34%;
+  height: 26%;
+  border-radius: 22px;
+}
+
+.tutorial-scene__sigil {
+  top: 10%;
+  right: 12%;
+  width: 78px;
+  height: 78px;
+  border-radius: 24px;
+  border: 1px solid rgba(214, 171, 84, 0.24);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 212, 121, 0.34), rgba(214, 171, 84, 0.08)),
+    rgba(16, 14, 22, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 14px 30px rgba(0, 0, 0, 0.28);
+}
+
+.tutorial-scene__sigil::before {
+  content: "III";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--kf-gold-strong);
+  font-family: var(--kf-font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+}
+
+.tutorial-scene__runes {
+  inset: auto 8% 18% auto;
+  width: 150px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  box-shadow:
+    0 -18px 0 rgba(255, 255, 255, 0.14),
+    0 18px 0 rgba(255, 255, 255, 0.14);
+  opacity: 0.75;
+}
+
+.tutorial-scene__beam {
+  left: 16%;
+  right: 16%;
+  bottom: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 212, 121, 0.6), transparent);
+  box-shadow: 0 0 18px rgba(255, 212, 121, 0.28);
+}
+
+.tutorial-scene__caption {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(6, 7, 12, 0.62);
+  color: var(--kf-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.tutorial-scene__frame.is-welcome .tutorial-scene__halo {
+  background: radial-gradient(circle, rgba(214, 171, 84, 0.4), transparent 70%);
+}
+
+.tutorial-scene__frame.is-welcome .tutorial-scene__card--main::before,
+.tutorial-scene__frame.is-forge .tutorial-scene__card--main::before,
+.tutorial-scene__frame.is-archive .tutorial-scene__card--main::before,
+.tutorial-scene__frame.is-delivery .tutorial-scene__card--main::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 18px;
+}
+
+.tutorial-scene__frame.is-welcome .tutorial-scene__card--main::before {
+  background:
+    linear-gradient(180deg, rgba(255, 212, 121, 0.12), transparent 40%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05) 0,
+      rgba(255, 255, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 18px
+    );
+}
+
+.tutorial-scene__frame.is-forge .tutorial-scene__halo {
+  background: radial-gradient(circle, rgba(255, 212, 121, 0.3), transparent 70%);
+}
+
+.tutorial-scene__frame.is-forge .tutorial-scene__card--main::before {
+  background:
+    linear-gradient(180deg, rgba(255, 212, 121, 0.08), transparent 44%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: auto, 28px 100%, 100% 28px;
+}
+
+.tutorial-scene__frame.is-archive .tutorial-scene__halo {
+  background: radial-gradient(circle, rgba(126, 96, 230, 0.42), transparent 70%);
+}
+
+.tutorial-scene__frame.is-archive .tutorial-scene__card--main::before {
+  background:
+    radial-gradient(circle at 50% 35%, rgba(126, 96, 230, 0.36), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 60%);
+}
+
+.tutorial-scene__frame.is-delivery .tutorial-scene__halo {
+  background: radial-gradient(circle, rgba(111, 224, 163, 0.34), transparent 70%);
+}
+
+.tutorial-scene__frame.is-delivery .tutorial-scene__card--main::before {
+  background:
+    linear-gradient(135deg, rgba(111, 224, 163, 0.16), rgba(108, 198, 255, 0.08)),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.06) 0,
+      rgba(255, 255, 255, 0.06) 2px,
+      transparent 2px,
+      transparent 16px
+    );
+}
+
+.tutorial-card__actions {
+  padding-top: 4px;
+}
+
+.tutorial-card__back,
+.tutorial-card__next {
+  min-width: 170px;
+}
+
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1120px) {
   .workspace,
@@ -1246,6 +1606,14 @@ select:focus-visible {
 
   .hero-card__visual {
     order: -1;
+  }
+
+  .tutorial-card__content {
+    grid-template-columns: 1fr;
+  }
+
+  .tutorial-scene__frame {
+    min-height: 320px;
   }
 }
 
@@ -1301,6 +1669,14 @@ select:focus-visible {
 
   .royal-mark span:last-child {
     display: none;
+  }
+
+  .hero-card__actions {
+    margin-top: 10px;
+  }
+
+  .hero-card__tutorial-button {
+    width: 100%;
   }
 
   .toolbar {
@@ -1497,6 +1873,112 @@ select:focus-visible {
 
   .preview-panel pre {
     max-height: 260px;
+  }
+
+  .tutorial-overlay {
+    padding:
+      calc(10px + var(--kf-safe-top))
+      calc(10px + var(--kf-safe-right))
+      calc(10px + var(--kf-safe-bottom))
+      calc(10px + var(--kf-safe-left));
+  }
+
+  .tutorial-card {
+    gap: 14px;
+    max-height: 100%;
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .tutorial-card::before {
+    border-radius: 21px;
+  }
+
+  .tutorial-card__topbar,
+  .tutorial-card__actions {
+    gap: 10px;
+  }
+
+  .tutorial-progress {
+    gap: 8px;
+  }
+
+  .tutorial-copy {
+    gap: 12px;
+    padding: 0;
+  }
+
+  .tutorial-copy h2 {
+    font-size: 1.34rem;
+  }
+
+  .tutorial-copy__body {
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .tutorial-copy__list {
+    gap: 8px;
+  }
+
+  .tutorial-copy__list li {
+    padding: 11px 12px 11px 36px;
+    border-radius: 14px;
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .tutorial-copy__list li::before {
+    top: 11px;
+    left: 13px;
+  }
+
+  .tutorial-scene__frame {
+    min-height: 240px;
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .tutorial-scene__card--main {
+    top: 16%;
+    left: 10%;
+    width: 56%;
+    height: 46%;
+  }
+
+  .tutorial-scene__card--side {
+    right: 9%;
+    bottom: 24%;
+    width: 36%;
+    height: 25%;
+  }
+
+  .tutorial-scene__sigil {
+    top: 10%;
+    right: 10%;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+  }
+
+  .tutorial-scene__caption {
+    left: 16px;
+    right: 16px;
+    bottom: 14px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 0.76rem;
+  }
+
+  .tutorial-card__actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .tutorial-card__back,
+  .tutorial-card__next,
+  .tutorial-card__skip {
+    width: 100%;
   }
 }
 
