@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build APK
@@ -44,6 +47,14 @@ jobs:
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Kingdoom-Fichas-v5.0.2-APK
+          name: Kingdoom-Fichas-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      - name: Publish Latest Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "latest"
+          name: "Kingdoom Fichas (Automated Latest)"
+          make_latest: "true"
+          files: android/app/build/outputs/apk/debug/app-debug.apk
