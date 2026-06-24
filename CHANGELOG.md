@@ -2,6 +2,16 @@
 
 Las entradas más recientes van arriba.
 
+## [Audit Note] - 2026-06-24
+
+Correccion retroactiva de trazabilidad:
+
+- La release `5.0.2` del `2026-06-23` y la automatizacion de release introducida esa misma noche deben considerarse parte del ciclo operativo coordinado con **Antigravity 2**, aunque el commit visible `dee36a9` figure con autor `Codex` y el commit `d030572` no distinga variante de agente.
+- Commits asociados a esta nota:
+  - `dee36a9` `feat: add mobile onboarding tutorial v5.0.2`
+  - `d030572` `ci: automate release generation for apk bot`
+- Esta nota ajusta la atribucion documental del relevo y no modifica la autoria git ni el contenido tecnico de las entradas ya registradas.
+
 ## [5.0.2] - 2026-06-23
 
 Tutorial inicial mobile-first para mejorar onboarding, reducir fricción en el primer uso y sanear textos visibles.

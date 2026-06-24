@@ -1,5 +1,14 @@
 # Kingdoom Fichas - Handoff para agentes
 
+## Update 2026-06-24 - [Codex]
+
+- Nota retroactiva de trazabilidad: el bloque de trabajo del `2026-06-23` asociado a la release `5.0.2` y a la automatizacion de release para el APK debe considerarse parte del ciclo operativo de **Antigravity 2**.
+- Esta correccion se deja por claridad historica, porque el changelog/commits visibles no distinguen consistentemente entre `Antigravity`, `Antigravity 2` y `Codex`.
+- Commits referenciados por esta nota:
+  - `dee36a9` `feat: add mobile onboarding tutorial v5.0.2`
+  - `d030572` `ci: automate release generation for apk bot`
+- La nota no altera autoria git; solo deja trazabilidad humana mas precisa para relevos futuros.
+
 ## Update 2026-06-19 - [Codex]
 
 - Se tomo el relevo del trabajo iniciado por Claude sobre saturacion mobile y egress de Supabase.
