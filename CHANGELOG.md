@@ -1,6 +1,19 @@
-# Changelog - Kingdoom · Archivo del Trono (`kingdoom-fichas`)
+﻿# Changelog - Kingdoom Â· Archivo del Trono (`kingdoom-fichas`)
 
-Las entradas más recientes van arriba.
+Las entradas mÃ¡s recientes van arriba.
+
+## [Repo Hygiene] - 2026-06-29
+
+Limpieza preventiva del repo para mantener la raiz y Android mas prolijos.
+
+### Cambiado
+
+- `.gitignore` ahora cubre tambien artefactos de firmado y build Android regenerables: `*.idsig`, `android/.gradle/`, `android/build/`, `android/app/build/` y `android/local.properties`.
+- No se movieron archivos de codigo ni documentacion porque la estructura actual del repo ya estaba razonablemente ordenada y no habia temporales rastreados equivalentes a los de los otros repos.
+
+### Notas de build
+
+- No se ejecuto `npm run lint` ni `npm run build` porque la entrega fue exclusivamente de higiene de repositorio y reglas de ignore.
 
 ## [Audit Note] - 2026-06-24
 
@@ -14,9 +27,9 @@ Correccion retroactiva de trazabilidad:
 
 ## [5.0.2] - 2026-06-23
 
-Tutorial inicial mobile-first para mejorar onboarding, reducir fricción en el primer uso y sanear textos visibles.
+Tutorial inicial mobile-first para mejorar onboarding, reducir fricciÃ³n en el primer uso y sanear textos visibles.
 
-### Añadido
+### AÃ±adido
 
 - Overlay fullscreen de onboarding que aparece solo en el primer arranque.
 - Carrusel de 4 pantallas con progreso visible, navegacion por botones y gesto swipe.
@@ -26,8 +39,8 @@ Tutorial inicial mobile-first para mejorar onboarding, reducir fricción en el p
 ### Cambiado
 
 - El estado del tutorial ahora se persiste en `localStorage` para no repetirlo en aperturas futuras.
-- El layout del tutorial se ajustó específicamente para pantallas móviles: texto más compacto, escenas CSS ilustradas y acciones en columna.
-- Se corrigieron textos visibles del home y panel móvil para evitar inconsistencias de acentos antes del build.
+- El layout del tutorial se ajustÃ³ especÃ­ficamente para pantallas mÃ³viles: texto mÃ¡s compacto, escenas CSS ilustradas y acciones en columna.
+- Se corrigieron textos visibles del home y panel mÃ³vil para evitar inconsistencias de acentos antes del build.
 
 ### Notas de build
 
@@ -91,7 +104,7 @@ Distribucion V2 (APK de grupo). Pasada de calidad visual + cierre de funciones.
 
 ### Cambiado
 
-- Rediseño visual completo con identidad noble Kingdoom: oro, carbon, violeta y azul arcano.
+- RediseÃ±o visual completo con identidad noble Kingdoom: oro, carbon, violeta y azul arcano.
 - Hero ceremonial, tarjetas premium, panel lateral de veredicto y mejoras de lectura responsive.
 - Reorganizacion estructural del frontend:
   - `src/components/` para UI reutilizable
@@ -110,3 +123,4 @@ Distribucion V2 (APK de grupo). Pasada de calidad visual + cierre de funciones.
 
 - Base funcional: formulario de ficha, validador local, generador aleatorio y salida lista para WhatsApp.
 - Proyecto Vite + React + TypeScript + Capacitor (Android).
+
