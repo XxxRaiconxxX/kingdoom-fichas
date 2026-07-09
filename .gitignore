@@ -33,3 +33,6 @@ android/local.properties
 *.njsproj
 *.sln
 *.sw?
+# Graphify stays at repo root, but its outputs and Codex hooks are local machine state.
+.codex/
+graphify-out/

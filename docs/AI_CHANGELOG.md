@@ -1,5 +1,20 @@
 # AI_CHANGELOG
 
+## 2026-07-09 - [Codex] Graphify operativo y portable para el flujo de fichas
+
+- Se agregaron los comandos `npm run graphify:setup`, `graphify:doctor`, `graphify:update`, `graphify:rebuild` y `graphify:watch` en `package.json`.
+- Se versionaron `AGENTS.md`, `.agents/rules/graphify.md`, `.agents/workflows/graphify.md`, `.codex/skills/graphify/`, `scripts/graphify-manager.mjs` y `docs/graphify/OPERATIONS.md` para que Codex y otros agentes usen Graphify con el mismo criterio en este repo.
+- `.codex/hooks.json` y `graphify-out/` quedan como estado local por maquina; la skill de Codex se conserva versionada para mantener `/graphify` entre clones.
+
+### Validacion
+
+- `npm run graphify:setup`
+- `npm run graphify:doctor`
+
+### Riesgos abiertos
+
+- La instalacion sigue requiriendo que el CLI `graphify` exista en la maquina; el repo ya queda preparado para usarlo apenas este instalado.
+
 ## 2026-06-19 - [Codex] Reduccion de egress Supabase y compactacion mobile post V5
 
 - Se redujo el consumo de egress del sync del grimorio en `src/services/grimorio.ts`:
